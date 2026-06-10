@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.sidebar.title("📁 Documentación Azure DevOps")
+st.sidebar.title("📁 Gestión Documental")
 
 menu = st.sidebar.selectbox(
     "Seleccione una opción",
@@ -23,24 +23,20 @@ menu = st.sidebar.selectbox(
 
 if menu == "🏠 Inicio":
 
-    st.title("Sistema de Gestión Documental")
+    st.title("Documentación de iniciativas IT")
 
     st.subheader(
-        "Gestión documental de iniciativas de software de la vicepresidencia de tecnología"
+        "Documentación centralizada con servicios Azure DevOps"
     )
 
     st.write("""
     Este prototipo permite:
 
-    ✔ Centralizar documentación
-
-    ✔ Controlar versiones
-
-    ✔ Gestionar aprobaciones
-
-    ✔ Consultar información actualizada
-
-    ✔ Visualizar indicadores
+    🚀 Centralizar documentación
+    🚀 Controlar versiones
+    🚀 Gestionar aprobaciones
+    🚀 Consultar información actualizada
+    🚀 Visualizar indicadores
     """)
 
 if menu == "📝 Registrar Documento":
