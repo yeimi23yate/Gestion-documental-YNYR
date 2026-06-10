@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.sidebar.title("📁 Iniciativas de Software")
+st.sidebar.title("📁 Documentación Azure DevOps")
 
 menu = st.sidebar.selectbox(
     "Seleccione una opción",
