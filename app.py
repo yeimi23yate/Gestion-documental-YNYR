@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.sidebar.title("📁 Gestión Documental")
+st.sidebar.title("📁 Gestión Documental de iniciativas en Azure DevOps")
 
 menu = st.sidebar.selectbox(
     "Seleccione una opción",
@@ -26,7 +26,7 @@ if menu == "🏠 Inicio":
     st.title("Sistema de Gestión Documental")
 
     st.subheader(
-        "Gestión documental de iniciativas de software"
+        "Gestión documental de iniciativas de software de la vicepresidencia de tecnología"
     )
 
     st.write("""
