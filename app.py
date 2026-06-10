@@ -33,10 +33,15 @@ if menu == "🏠 Inicio":
     Este prototipo permite:
 
     🚀 Centralizar documentación
+    
     🚀 Controlar versiones
+    
     🚀 Gestionar aprobaciones
+    
     🚀 Consultar información actualizada
+    
     🚀 Visualizar indicadores
+    
     """)
 
 if menu == "📝 Registrar Documento":
