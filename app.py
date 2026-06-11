@@ -20,9 +20,8 @@ menu = st.sidebar.selectbox(
         "📊 Dashboard"
     ]
 )
-if menu == "🏠 Inicio":
-
-st.title("Documentación de Iniciativas IT")
+if menu = "🏠 Inicio":
+ st.title("Documentación de Iniciativas IT")
 
 st.caption(
     "Modelo de Gestión Documental Centralizada basado en Azure DevOps"
