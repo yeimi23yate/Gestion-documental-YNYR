@@ -19,7 +19,7 @@ st.markdown("""
 <style>
 
 .stApp {
-    background-image: url("https://raw.githubusercontent.com/TU_USUARIO/TU_REPOSITORIO/main/logo.png");
+    background-image: url("log_CCB.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 300px;
