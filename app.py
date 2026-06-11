@@ -113,6 +113,29 @@ if menu == "📝 Registrar Documento":
     responsable = st.text_input(
         "Responsable"
     )
+     st.title("Registro de Documento")
+
+    nombre = st.text_input("Nombre del documento")
+
+    tipo = st.selectbox(
+        "Tipo de documento",
+        [
+            "Caso de Prueba",
+            "Manual",
+            "Requerimiento",
+            "Documento Técnico"
+        ]
+    )
+
+    version = st.text_input("Versión")
+
+    responsable = st.text_input("Responsable")
+
+    # ✅ NUEVO: carga de archivo
+    archivo = st.file_uploader(
+        "Adjuntar documento",
+        type=["pdf", "docx", "xlsx", "txt"]
+    )
 
 # =====================================================
 # REPOSITORIO DOCUMENTAL
