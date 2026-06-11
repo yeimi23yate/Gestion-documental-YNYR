@@ -113,7 +113,7 @@ if menu == "📝 Registrar Documento":
     responsable = st.text_input(
         "Responsable"
     )
-     st.title("Registro de Documento")
+st.title("Registro de Documento")
 
     nombre = st.text_input("Nombre del documento")
 
