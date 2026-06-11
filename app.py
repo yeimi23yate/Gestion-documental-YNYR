@@ -266,11 +266,7 @@ if menu == "✅ Aprobaciones":
             st.write(f"**Versión:** {doc['Versión']}")
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
-
-            if "Observaciones" in doc:
-                st.write("**Observaciones anteriores:**")
-                st.info(doc["Observaciones"])
-
+            
         # ==========================
         # VISTA PREVIA VISUAL
         # ==========================
