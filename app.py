@@ -11,38 +11,42 @@ st.set_page_config(
     page_icon="📈",
     layout="wide"
 )
-import os
 
-st.write("logo.png existe:", os.path.exists("logo.png"))
 # =====================================================
-# FUNCIÓN PARA CARGAR IMAGEN DE FONDO
+# MARCA DE AGUA
 # =====================================================
 
 def get_base64(file):
     with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# Logo para marca de agua
 logo = get_base64("logo.png")
 
-# =====================================================
-# ESTILOS - MARCA DE AGUA
-# =====================================================
-
 st.markdown(
-    """
+    f"""
     <style>
-    img {
-        opacity: 0.08;
-    }
+
+    .watermark {{
+        position: fixed;
+        top: 50%;
+        left: 60%;
+        transform: translate(-50%, -50%);
+        opacity: 0.03;
+        z-index: 999;
+        pointer-events: none;
+    }}
+
     </style>
+
+    <div class="watermark">
+        <img src="data:image/png;base64,{logo}" width="250">
+    </div>
     """,
     unsafe_allow_html=True
 )
-st.image("logo.png", width=150)
 
 # =====================================================
-# ENCABEZADO
+# LOGO INSTITUCIONAL
 # =====================================================
 
 st.image("log_CCB.png", width=150)
