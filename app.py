@@ -21,12 +21,19 @@ menu = st.sidebar.selectbox(
     ]
 )
 if menu == "🏠 Inicio":
- st.title("Documentación de Iniciativas IT")
 
-st.caption(
-    "Modelo de Gestión Documental Centralizada basado en Azure DevOps"
-)
-st.write("""
+    st.title("Documentación de Iniciativas IT")
+
+    st.markdown(
+        """
+        <p style='margin-top:-20px; color:gray; font-size:16px;'>
+        Modelo de Gestión Documental Centralizada basado en Azure DevOps
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.write("""
     Este prototipo permite:
 
     🚀 Centralizar documentación
