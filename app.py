@@ -23,7 +23,6 @@ menu = st.sidebar.selectbox(
 
 if menu == "🏠 Inicio":
 
-st.image("logo_azure.png", width=150)
 st.title("Documentación de Iniciativas IT")
 
 st.caption(
