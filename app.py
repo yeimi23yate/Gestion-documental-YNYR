@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import base64
 
 # =====================================================
 # CONFIGURACIÓN DE PÁGINA
@@ -11,6 +12,37 @@ st.set_page_config(
     layout="wide"
 )
 
+# =====================================================
+# LOGO DE FONDO
+# =====================================================
+
+def get_base64(file):
+    with open(file, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+logo = get_base64("logo.png")
+
+st.markdown(
+    f"""
+    <style>
+
+    .main {{
+        background-image: url("data:image/png;base64,{logo}");
+        background-repeat: no-repeat;
+        background-position: center 180px;
+        background-size: 220px;
+    }}
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# =====================================================
+# LOGO INSTITUCIONAL
+# =====================================================
+
+st.image("log_CCB.png", width=150)
 # =====================================================
 # ENCABEZADO
 # =====================================================
