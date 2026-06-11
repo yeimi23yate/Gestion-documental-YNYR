@@ -36,8 +36,8 @@ menu = st.sidebar.selectbox(
     [
         "🏠 Inicio",
         "📝 Registrar Documento",
-        "📚 Repositorio Documental",
         "✅ Aprobaciones",
+        "📚 Repositorio Documental",
         "🔄 Control de Versiones",
         "🔍 Consulta",
         "📊 Dashboard"
@@ -86,6 +86,33 @@ if menu == "🏠 Inicio":
 
     ✅ Indicadores para la toma de decisiones
     """)
+# =====================================================
+# REGISTRAR DOCUMENTO
+# =====================================================
+
+if menu == "📝 Registrar Documento":
+
+    st.title("Registro de Documento")
+
+    nombre = st.text_input(
+        "Nombre del documento"
+    )
+
+    tipo = st.selectbox(
+        "Tipo de documento",
+        [
+            "Caso de Prueba",
+            "Manual",
+            "Requerimiento",
+            "Documento Técnico"
+        ]
+    )
+
+    version = st.text_input("Versión")
+
+    responsable = st.text_input(
+        "Responsable"
+    )
 
 # =====================================================
 # REPOSITORIO DOCUMENTAL
