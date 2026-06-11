@@ -274,10 +274,6 @@ if menu == "✅ Aprobaciones":
 
             st.subheader("👁️ Vista previa del documento")
 
-            archivo_nombre = doc.get("NombreArchivo", "")
-
-            if archivo_nombre.endswith(".pdf"):
-
                 st.download_button(
                     label="📥 Descargar PDF",
                     data=doc["Contenido"],
