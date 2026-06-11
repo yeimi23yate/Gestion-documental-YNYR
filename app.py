@@ -239,7 +239,7 @@ if menu == "🔄 Control de Versiones":
 # APROBACIONES
 # =====================================================
 
-if menu == "✅ Aprobaciones":
+if menu == "✅ WorkFlow":
 
     st.title("✅ Flujo de Aprobación")
 
