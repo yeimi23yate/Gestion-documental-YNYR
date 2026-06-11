@@ -269,7 +269,68 @@ if menu == "✅ Aprobaciones":
 
         st.info(
             "📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado"
-         )           
+        )
+
+        st.progress(75)
+
+        st.divider()
+
+        col1, col2 = st.columns([1, 2])
+
+        # Información del documento
+
+        with col1:
+
+            st.subheader("📋 Información del Documento")
+
+            st.write(f"**Documento:** {doc['Documento']}")
+            st.write(f"**Versión:** {doc['Versión']}")
+            st.write(f"**Responsable:** {doc['Responsable']}")
+            st.write(f"**Estado:** {doc['Estado']}")
+
+        # Vista previa
+
+        with col2:
+
+            st.subheader("👁️ Vista previa")
+
+            st.text_area(
+                "Contenido",
+                doc["Contenido"],
+                height=300,
+                disabled=True
+            )
+
+        st.divider()
+
+        observaciones = st.text_area(
+            "📝 Observaciones del Revisor"
+        )
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            if st.button("✅ Aprobar Documento"):
+
+                doc["Estado"] = "Aprobado"
+                doc["Observaciones"] = observaciones
+
+                st.session_state.documentos.append(doc)
+
+                st.session_state.documento_pendiente = None
+
+                st.success(
+                    "Documento aprobado y publicado en el repositorio documental."
+                )
+
+        with col2:
+
+            if st.button("❌ Rechazar Documento"):
+
+                st.error(
+                    "Documento rechazado. Se requiere ajuste por parte del responsable."
+                )
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
