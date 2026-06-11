@@ -29,38 +29,24 @@ logo = get_base64("logo.png")
 # ESTILOS - MARCA DE AGUA
 # =====================================================
 
-st.markdown(
-    f"""
-    <style>
+st.markdown("""
+<style>
 
-    .stApp::before {{
-        content: "";
-        position: fixed;
-        top: 50%;
-        left: 60%;
-        width: 250px;
-        height: 250px;
-        transform: translate(-50%, -50%);
-        background-image: url("data:image/png;base64,{logo}");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        opacity: 0.03;
-        pointer-events: none;
-        z-index: 0;
-    }}
+.stApp {
+    background-image: url('./logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 250px;
+}
 
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+</style>
+""", unsafe_allow_html=True)
 
 # =====================================================
 # ENCABEZADO
 # =====================================================
 
 st.image("log_CCB.png", width=150)
-st.image("logo.png", width=300)
 
 # =====================================================
 # MENÚ LATERAL
