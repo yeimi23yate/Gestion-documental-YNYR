@@ -91,72 +91,25 @@ if menu == "🏠 Inicio":
 # REGISTRO DOCUMENTAL
 # =====================================================
 
-if menu == "📝 Registrar Documento":
+if menu == "📚 Repositorio Documental":
 
-    st.title("📝 Registro de Documento")
+    st.title("📚 Repositorio Documental")
 
-    col1, col2 = st.columns(2)
+    if len(st.session_state.documentos) == 0:
 
-    with col1:
-
-        nombre = st.text_input("Nombre del documento")
-
-        iniciativa = st.selectbox(
-            "Iniciativa",
-            [
-                "Marketplace",
-                "Crédito Digital",
-                "Canales",
-                "Seguros"
-            ]
+        st.info(
+            "No existen documentos aprobados."
         )
 
-        tipo = st.selectbox(
-            "Tipo de documento",
-            [
-                "Caso de Prueba",
-                "Manual",
-                "Requerimiento",
-                "Documento Técnico"
-            ]
+    else:
+
+        documentos = pd.DataFrame(
+            st.session_state.documentos
         )
 
-    with col2:
-
-        version = st.text_input("Versión")
-
-        responsable = st.text_input("Responsable")
-
-        estado = st.selectbox(
-            "Estado",
-            [
-                "Borrador",
-                "En revisión"
-            ]
-        )
-
-    contenido = st.text_area(
-        "Contenido del documento"
-    )
-
-    archivo = st.file_uploader(
-        "Adjuntar documento",
-        type=["pdf", "docx", "xlsx"]
-    )
-
-    if st.button("Guardar Documento"):
-
-        st.session_state.documento_pendiente = {
-            "Documento": nombre,
-            "Versión": version,
-            "Responsable": responsable,
-            "Estado": "En revisión",
-            "Contenido": contenido,
-            "Observaciones": ""
-        }
-
-        st.success(
-            "Documento enviado al Workflow para aprobación."
+        st.dataframe(
+            documentos,
+            use_container_width=True
         )
 
 # =====================================================
