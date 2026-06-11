@@ -47,9 +47,6 @@ st.image("log_CCB.png", width=150)
 # ENCABEZADO
 # =====================================================
 
-# Logo Cámara de Comercio
-st.image("log_CCB.png", width=150)
-
 # Logo principal centrado
 col1, col2, col3 = st.columns([1,2,1])
 
