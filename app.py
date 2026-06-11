@@ -23,12 +23,13 @@ menu = st.sidebar.selectbox(
 
 if menu == "🏠 Inicio":
 
-    st.title("Documentación de iniciativas IT")
+    st.image("logo_azure.png", width=150)
 
-    st.subheader(
-        "Documentación centralizada con servicios Azure DevOps"
-    )
+st.title("Documentación de Iniciativas IT")
 
+st.caption(
+    "Modelo de Gestión Documental Centralizada basado en Azure DevOps"
+)
     st.write("""
     Este prototipo permite:
 
