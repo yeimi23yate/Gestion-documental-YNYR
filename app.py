@@ -6,12 +6,14 @@ def get_base64(file):
     with open(file, "rb") as f:
         data = f.read()
     return base64.b64encode(data).decode()
-    logo = get_base64("logo.png")
-    st.markdown(
+
+logo = get_base64("logo.png")
+
+st.markdown(
     f"""
     <style>
     .stApp {{
-        background-image: url("png;base64,{logo}");
+        background-image: url("data:image/png;base64,{logo}");
         background-repeat: no-repeat;
         background-position: center;
         background-size: 450px;
