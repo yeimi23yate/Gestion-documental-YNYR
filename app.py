@@ -40,7 +40,7 @@ st.set_page_config(
 )
 import os
 
-st.write("Existe logo:", os.path.exists("logo.png"))
+st.image("logo.png", width=200)
 st.image("log_CCB.png", width=150)
 st.sidebar.title("🗃️ Gestión Documental")
 
