@@ -16,7 +16,7 @@ st.markdown(
         background-image: url("data:image/png;base64,{logo}");
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 450px;
+        background-size: 1000 x 1000 px;
     }}
     </style>
     """,
