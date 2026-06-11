@@ -11,7 +11,9 @@ st.set_page_config(
     page_icon="📈",
     layout="wide"
 )
+import os
 
+st.write("logo.png existe:", os.path.exists("logo.png"))
 # =====================================================
 # FUNCIÓN PARA CARGAR IMAGEN DE FONDO
 # =====================================================
