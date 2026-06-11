@@ -12,11 +12,21 @@ logo = get_base64("logo.png")
 st.markdown(
     f"""
     <style>
-    .stApp {{
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 50%;
+        left: 60%;
+        width: 350px;
+        height: 350px;
+        transform: translate(-50%, -50%);
         background-image: url("data:image/png;base64,{logo}");
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 50 px;
+        background-size: contain;
+        opacity: 0.03;
+        z-index: -1;
+        pointer-events: none;
     }}
     </style>
     """,
