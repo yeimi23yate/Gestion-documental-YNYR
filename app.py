@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import base64
 
 # =====================================================
 # CONFIGURACIÓN DE PÁGINA
@@ -13,44 +12,18 @@ st.set_page_config(
 )
 
 # =====================================================
-# MARCA DE AGUA
+# ENCABEZADO
 # =====================================================
 
-def get_base64(file):
-    with open(file, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
-logo = get_base64("logo.png")
-
-st.markdown(
-    f"""
-    <style>
-
-    .watermark {{
-        position: fixed;
-        top: 50%;
-        left: 60%;
-        transform: translate(-50%, -50%);
-        opacity: 0.03;
-        z-index: 999;
-        pointer-events: none;
-    }}
-
-    </style>
-
-    <div class="watermark">
-        <img src="data:image/png;base64,{logo}" width="250">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-# =====================================================
-# LOGO INSTITUCIONAL
-# =====================================================
-
+# Logo Cámara de Comercio
 st.image("log_CCB.png", width=150)
-st.image("logo.png", width=250)
+
+# Logo principal centrado
+col1, col2, col3 = st.columns([1,2,1])
+
+with col2:
+    st.image("logo.png", width=300)
+
 # =====================================================
 # MENÚ LATERAL
 # =====================================================
@@ -108,9 +81,7 @@ if menu == "📝 Registrar Documento":
 
     st.title("Registro de Documento")
 
-    nombre = st.text_input(
-        "Nombre del documento"
-    )
+    nombre = st.text_input("Nombre del documento")
 
     tipo = st.selectbox(
         "Tipo de documento",
@@ -124,15 +95,10 @@ if menu == "📝 Registrar Documento":
 
     version = st.text_input("Versión")
 
-    responsable = st.text_input(
-        "Responsable"
-    )
+    responsable = st.text_input("Responsable")
 
     if st.button("Guardar Documento"):
-
-        st.success(
-            "Documento registrado correctamente"
-        )
+        st.success("Documento registrado correctamente")
 
 # =====================================================
 # CONTROL DE VERSIONES
@@ -153,10 +119,7 @@ if menu == "🔄 Control de Versiones":
     st.write("Versión actual: 1.0")
 
     if st.button("Crear Nueva Versión"):
-
-        st.success(
-            "Nueva versión creada: 1.1"
-        )
+        st.success("Nueva versión creada: 1.1")
 
 # =====================================================
 # APROBACIONES
@@ -180,10 +143,7 @@ if menu == "✅ Aprobaciones":
     st.write("Estado actual:", estado)
 
     if st.button("Aprobar"):
-
-        st.success(
-            "Documento aprobado"
-        )
+        st.success("Documento aprobado")
 
 # =====================================================
 # CONSULTA
@@ -193,9 +153,7 @@ if menu == "🔍 Consulta":
 
     st.title("Consulta Documental")
 
-    buscar = st.text_input(
-        "Buscar Documento"
-    )
+    buscar = st.text_input("Buscar Documento")
 
     if buscar:
 
@@ -215,32 +173,13 @@ if menu == "📊 Dashboard":
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric(
-        "Documentos",
-        "25"
-    )
-
-    col2.metric(
-        "Aprobados",
-        "20"
-    )
-
-    col3.metric(
-        "Pendientes",
-        "5"
-    )
+    col1.metric("Documentos", "25")
+    col2.metric("Aprobados", "20")
+    col3.metric("Pendientes", "5")
 
     datos = pd.DataFrame({
-        "Estado": [
-            "Aprobados",
-            "Pendientes"
-        ],
-        "Cantidad": [
-            20,
-            5
-        ]
+        "Estado": ["Aprobados", "Pendientes"],
+        "Cantidad": [20, 5]
     })
 
-    st.bar_chart(
-        datos.set_index("Estado")
-    )
+    st.bar_chart(datos.set_index("Estado"))
