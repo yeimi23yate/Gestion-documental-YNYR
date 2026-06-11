@@ -86,34 +86,11 @@ if menu == "🏠 Inicio":
 
     ✅ Indicadores para la toma de decisiones
     """)
-# =====================================================
-# REGISTRAR DOCUMENTO
-# =====================================================
+st.title("📝 Registro de Documento")
 
-if menu == "📝 Registrar Documento":
-
-    st.title("Registro de Documento")
-
-    nombre = st.text_input(
-        "Nombre del documento"
-    )
-
-    tipo = st.selectbox(
-        "Tipo de documento",
-        [
-            "Caso de Prueba",
-            "Manual",
-            "Requerimiento",
-            "Documento Técnico"
-        ]
-    )
-
-    version = st.text_input("Versión")
-
-    responsable = st.text_input(
-        "Responsable"
-    )
-st.title("Registro de Documento")
+    # ================================
+    # CAMPOS DEL FORMULARIO
+    # ================================
 
     nombre = st.text_input("Nombre del documento")
 
@@ -131,11 +108,44 @@ st.title("Registro de Documento")
 
     responsable = st.text_input("Responsable")
 
-    # ✅ NUEVO: carga de archivo
+    # ================================
+    # CARGUE DE ARCHIVO
+    # ================================
+
     archivo = st.file_uploader(
-        "Adjuntar documento",
+        "📎 Adjuntar documento",
         type=["pdf", "docx", "xlsx", "txt"]
     )
+
+    st.divider()
+
+    # ================================
+    # BOTÓN ENVIAR A FLUJO
+    # ================================
+
+    if st.button("📤 Enviar a revisión"):
+
+        if nombre and version and responsable and archivo is not None:
+
+            documento = {
+                "Documento": nombre,
+                "Tipo": tipo,
+                "Versión": version,
+                "Responsable": responsable,
+                "Estado": "Registrado",
+
+                # contenido del archivo (binario)
+                "Contenido": archivo.read(),
+                "NombreArchivo": archivo.name
+            }
+
+            # Enviar al flujo de aprobación
+            st.session_state.documento_pendiente = documento
+
+            st.success("✅ Documento enviado correctamente al flujo de aprobación.")
+
+        else:
+            st.warning("⚠️ Por favor completa todos los campos y adjunta un archivo.")
 
 # =====================================================
 # REPOSITORIO DOCUMENTAL
