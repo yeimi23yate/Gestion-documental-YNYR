@@ -1,12 +1,68 @@
 import streamlit as st
 import pandas as pd
+import base64
+
+# =====================================================
+# CONFIGURACIÓN DE PÁGINA
+# =====================================================
 
 st.set_page_config(
     page_title="Gestión Documental",
     page_icon="📈",
     layout="wide"
 )
+
+# =====================================================
+# FUNCIÓN PARA CARGAR IMAGEN DE FONDO
+# =====================================================
+
+def get_base64(file):
+    with open(file, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+# Logo para marca de agua
+logo = get_base64("logo.png")
+
+# =====================================================
+# ESTILOS - MARCA DE AGUA
+# =====================================================
+
+st.markdown(
+    f"""
+    <style>
+
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 50%;
+        left: 60%;
+        width: 250px;
+        height: 250px;
+        transform: translate(-50%, -50%);
+        background-image: url("data:image/png;base64,{logo}");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        opacity: 0.03;
+        pointer-events: none;
+        z-index: 0;
+    }}
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# =====================================================
+# ENCABEZADO
+# =====================================================
+
 st.image("log_CCB.png", width=150)
+
+# =====================================================
+# MENÚ LATERAL
+# =====================================================
+
 st.sidebar.title("🗃️ Gestión Documental")
 
 menu = st.sidebar.selectbox(
@@ -20,6 +76,11 @@ menu = st.sidebar.selectbox(
         "📊 Dashboard"
     ]
 )
+
+# =====================================================
+# INICIO
+# =====================================================
+
 if menu == "🏠 Inicio":
 
     st.title("Documentación de Iniciativas IT")
@@ -37,16 +98,19 @@ if menu == "🏠 Inicio":
     Este prototipo permite:
 
     🚀 Centralizar documentación
-    
+
     🚀 Controlar versiones
-    
+
     🚀 Gestionar aprobaciones
-    
+
     🚀 Consultar información actualizada
-    
+
     🚀 Visualizar indicadores
-    
     """)
+
+# =====================================================
+# REGISTRO DOCUMENTAL
+# =====================================================
 
 if menu == "📝 Registrar Documento":
 
@@ -78,6 +142,10 @@ if menu == "📝 Registrar Documento":
             "Documento registrado correctamente"
         )
 
+# =====================================================
+# CONTROL DE VERSIONES
+# =====================================================
+
 if menu == "🔄 Control de Versiones":
 
     st.title("Control de Versiones")
@@ -97,6 +165,10 @@ if menu == "🔄 Control de Versiones":
         st.success(
             "Nueva versión creada: 1.1"
         )
+
+# =====================================================
+# APROBACIONES
+# =====================================================
 
 if menu == "✅ Aprobaciones":
 
@@ -121,6 +193,10 @@ if menu == "✅ Aprobaciones":
             "Documento aprobado"
         )
 
+# =====================================================
+# CONSULTA
+# =====================================================
+
 if menu == "🔍 Consulta":
 
     st.title("Consulta Documental")
@@ -132,16 +208,20 @@ if menu == "🔍 Consulta":
     if buscar:
 
         st.table({
-            "Documento":["CP_Login"],
-            "Versión":["1.1"],
-            "Estado":["Aprobado"]
+            "Documento": ["CP_Login"],
+            "Versión": ["1.1"],
+            "Estado": ["Aprobado"]
         })
+
+# =====================================================
+# DASHBOARD
+# =====================================================
 
 if menu == "📊 Dashboard":
 
     st.title("Indicadores")
 
-    col1,col2,col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
 
     col1.metric(
         "Documentos",
@@ -159,11 +239,11 @@ if menu == "📊 Dashboard":
     )
 
     datos = pd.DataFrame({
-        "Estado":[
+        "Estado": [
             "Aprobados",
             "Pendientes"
         ],
-        "Cantidad":[
+        "Cantidad": [
             20,
             5
         ]
