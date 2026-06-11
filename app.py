@@ -311,7 +311,7 @@ if menu == "✅ Aprobaciones":
 
         with colA:
 
-            if st.button("📤 Enviar a revisión"):
+            if st.button("📤 Aprobar documento"):
 
                 doc["Estado"] = "En revisión"
                 doc["Observaciones"] = observaciones
