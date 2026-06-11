@@ -238,76 +238,67 @@ if menu == "🔄 Control de Versiones":
 # =====================================================
 # APROBACIONES
 # =====================================================
-if menu == "🔄 Workflow":
 
-    st.title("🔄 Workflow de Aprobación")
+if menu == "✅ Documentos pendientes por aprobar":
 
-    col1, col2 = st.columns([1,2])
+    st.title("🔄 Workflow de Gestión Documental")
+
+    st.info(
+        "📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado"
+    )
+
+    st.progress(75)
+
+    st.divider()
+
+    col1, col2 = st.columns([1, 2])
+
+    # Información del documento
 
     with col1:
 
-        st.subheader("📋 Información")
+        st.subheader("📋 Información del Documento")
 
         st.write("**Documento:** CP Login")
         st.write("**Versión:** 1.3")
         st.write("**Responsable:** Analista QA")
         st.write("**Estado:** En revisión")
+        st.write("**Fecha creación:** 10/06/2026")
+        st.write("**Repositorio:** Azure DevOps")
+
+    # Vista previa del documento
 
     with col2:
 
         st.subheader("👁️ Vista previa")
 
-        st.info(
-            "Aquí se visualizará el documento antes de aprobarlo."
-        )
-
-        st.code(
-            '''
+        st.text_area(
+            "Contenido del documento",
+            """
 CASO DE PRUEBA
 
 Objetivo:
-Validar autenticación de usuario.
+Validar la autenticación del usuario.
 
 Precondiciones:
-Usuario registrado.
+- Usuario registrado.
+- Credenciales activas.
 
-Resultado esperado:
-Acceso exitoso.
-            '''
+Flujo Principal:
+1. Ingresar usuario.
+2. Ingresar contraseña.
+3. Hacer clic en Ingresar.
+
+Resultado Esperado:
+El sistema permite el acceso exitoso.
+            """,
+            height=300,
+            disabled=True
         )
 
     st.divider()
 
-    decision = st.selectbox(
-        "✅ Decisión",
-        [
-            "Aprobado",
-            "Rechazado"
-        ]
-    )
-
-    observaciones = st.text_area(
-        "📝 Observaciones"
-    )
-
-    if st.button("Enviar Decisión"):
-
-        st.success(
-            f"Documento {decision}"
-        )
-if menu == "✅ Documentos pendientes por aprobar":
-
-    st.title("✅ Flujo de Aprobación")
-
-    st.info("""
-    Documento pendiente de aprobación
-
-    Documento: CP Login
-
-    Versión: 1.3
-
-    Responsable: Analista QA
-    """)
+    st.subheader("📝 Gestión de aprobación")
 
     decision = st.selectbox(
         "Decisión",
@@ -318,15 +309,26 @@ if menu == "✅ Documentos pendientes por aprobar":
     )
 
     observaciones = st.text_area(
-        "Observaciones"
+        "Observaciones del revisor"
     )
 
-    if st.button("Enviar Decisión"):
+    col1, col2 = st.columns(2)
 
-        st.success(
-            f"Documento {decision}"
-        )
+    with col1:
 
+        if st.button("✅ Aprobar Documento"):
+
+            st.success(
+                "Documento aprobado y publicado en el repositorio documental."
+            )
+
+    with col2:
+
+        if st.button("❌ Rechazar Documento"):
+
+            st.error(
+                "Documento rechazado. Se requiere ajuste por parte del responsable."
+            )
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
