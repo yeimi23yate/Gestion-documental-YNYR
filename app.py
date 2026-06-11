@@ -147,43 +147,70 @@ if menu == "🔄 Control de Versiones":
 
     st.title("🔄 Control de Versiones")
 
-    historial = pd.DataFrame({
-        "Versión": [
-            "1.0",
-            "1.1",
-            "1.2",
-            "1.3"
-        ],
-        "Fecha": [
-            "01/05/2026",
-            "15/05/2026",
-            "01/06/2026",
-            "10/06/2026"
-        ],
-        "Responsable": [
-            "Analista QA",
-            "Analista QA",
-            "Líder QA",
-            "Líder QA"
-        ],
-        "Descripción": [
-            "Versión inicial",
-            "Actualización de contenido",
-            "Ajustes funcionales",
-            "Corrección de observaciones"
-        ]
-    })
+    if len(st.session_state.documentos) == 0:
 
-    st.dataframe(
-        historial,
-        use_container_width=True
-    )
-
-    if st.button("Crear Nueva Versión"):
-
-        st.success(
-            "Versión 1.4 creada correctamente"
+        st.info(
+            "No existen documentos aprobados para consultar versiones."
         )
+
+    else:
+
+        documento_seleccionado = st.selectbox(
+            "Seleccione un documento",
+            [
+                doc["Documento"]
+                for doc in st.session_state.documentos
+            ]
+        )
+
+        documento = next(
+            doc
+            for doc in st.session_state.documentos
+            if doc["Documento"] == documento_seleccionado
+        )
+
+        historial = pd.DataFrame({
+            "Documento": [documento["Documento"]],
+            "Versión": [documento["Versión"]],
+            "Responsable": [documento["Responsable"]],
+            "Estado": [documento["Estado"]]
+        })
+
+        st.dataframe(
+            historial,
+            use_container_width=True
+        )
+
+        st.subheader("📄 Información de la versión")
+
+        st.write(
+            f"**Documento:** {documento['Documento']}"
+        )
+
+        st.write(
+            f"**Versión actual:** {documento['Versión']}"
+        )
+
+        st.write(
+            f"**Responsable:** {documento['Responsable']}"
+        )
+
+        st.write(
+            f"**Estado:** {documento['Estado']}"
+        )
+
+        st.text_area(
+            "Contenido",
+            documento["Contenido"],
+            height=250,
+            disabled=True
+        )
+
+        if st.button("➕ Crear Nueva Versión"):
+
+            st.success(
+                f"Se ha generado una nueva versión basada en la versión {documento['Versión']}."
+            )
 
 # =====================================================
 # APROBACIONES
