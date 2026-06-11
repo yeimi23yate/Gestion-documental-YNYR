@@ -111,49 +111,6 @@ if menu == "📚 Repositorio Documental":
             documentos,
             use_container_width=True
         )
-# =====================================================
-# REPOSITORIO DOCUMENTAL
-# =====================================================
-
-if menu == "📚 Repositorio Documental":
-
-    st.title("📚 Repositorio Documental")
-
-    documentos = pd.DataFrame({
-        "Documento": [
-            "CP Login",
-            "HU Marketplace",
-            "Manual Usuario",
-            "Arquitectura Solución",
-            "Plan de Pruebas"
-        ],
-        "Versión": [
-            "1.2",
-            "2.0",
-            "1.5",
-            "3.1",
-            "2.4"
-        ],
-        "Estado": [
-            "Aprobado",
-            "Aprobado",
-            "En revisión",
-            "Aprobado",
-            "Aprobado"
-        ],
-        "Responsable": [
-            "Analista QA",
-            "Product Owner",
-            "Líder QA",
-            "Arquitecto",
-            "Analista QA"
-        ]
-    })
-
-    st.dataframe(
-        documentos,
-        use_container_width=True
-    )
 
 # =====================================================
 # CONTROL DE VERSIONES
