@@ -289,22 +289,6 @@ with col2:
             mime="application/pdf"
         )
 
-        # Vista embebida (visual)
-        st.write("📄 Vista previa del PDF:")
-        st.pdf = doc["Contenido"]
-
-        st.markdown(
-            f"""
-            <iframe
-                src="data:application/pdf;base64,{doc['Contenido'].hex()}"
-                width="100%"
-                height="500px"
-                type="application/pdf">
-            </iframe>
-            """,
-            unsafe_allow_html=True
-        )
-
     # ==========================
     # OTROS ARCHIVOS
     # ==========================
