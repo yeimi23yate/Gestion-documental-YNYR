@@ -295,16 +295,6 @@ if menu == "✅ Aprobaciones":
                     height=500
                 )
 
-            else:
-
-                st.info("📄 Este archivo no tiene vista previa visual disponible.")
-
-                st.download_button(
-                    "📥 Descargar documento",
-                    data=doc["Contenido"],
-                    file_name=archivo_nombre
-                )
-
         st.divider()
 
         # ==========================
