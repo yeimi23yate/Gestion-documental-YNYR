@@ -307,29 +307,35 @@ if menu == "✅ Aprobaciones":
         # ACCIONES
         # ==========================
 
-        colA, colB = st.columns(2)
+       colA, colB = st.columns(2)
 
-        with colA:
+with colA:
 
-            if st.button("📤 Aprobar documento"):
+    if st.button("📤 Aprobar documento"):
 
-                doc["Estado"] = "En revisión"
-                doc["Observaciones"] = observaciones
+        # ✅ CAMBIO REAL DE ESTADO
+        doc["Estado"] = "Aprobado"
+        doc["Observaciones"] = observaciones
 
-                st.session_state.documento_pendiente = doc
+        # 📚 PASA AL REPOSITORIO
+        st.session_state.documentos.append(doc)
 
-                st.success("Documento enviado a revisión.")
+        # 🧹 SE LIMPIA PENDIENTE (flujo avanza)
+        st.session_state.documento_pendiente = None
 
-        with colB:
+        st.success("✅ Documento aprobado y publicado en el repositorio.")
 
-            if st.button("❌ Rechazar Documento"):
+with colB:
 
-                doc["Estado"] = "Rechazado"
-                doc["Observaciones"] = observaciones
+    if st.button("❌ Rechazar Documento"):
 
-                st.session_state.documento_pendiente = None
+        doc["Estado"] = "Rechazado"
+        doc["Observaciones"] = observaciones
 
-                st.error("Documento rechazado.")
+        # ❌ NO VA AL REPOSITORIO
+        st.session_state.documento_pendiente = None
+
+        st.error("❌ Documento rechazado y devuelto al flujo.")
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
