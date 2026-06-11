@@ -26,7 +26,7 @@ if menu == "🏠 Inicio":
 st.caption(
     "Modelo de Gestión Documental Centralizada basado en Azure DevOps"
 )
-    st.write("""
+st.write("""
     Este prototipo permite:
 
     🚀 Centralizar documentación
