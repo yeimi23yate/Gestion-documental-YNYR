@@ -6,7 +6,7 @@ st.set_page_config(
     page_icon="📁",
     layout="wide"
 )
-    st.image("log_CCB.png", width=150)
+st.image("log_CCB.png", width=150)
 st.sidebar.title("📁 Gestión Documental")
 
 menu = st.sidebar.selectbox(
