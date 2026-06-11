@@ -1,5 +1,25 @@
 import streamlit as st
 import pandas as pd
+import base64
+
+def get_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+    logo = get_base64("logo.png")
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/png;base64,{logo}");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 450px;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 st.set_page_config(
     page_title="Gestión Documental",
