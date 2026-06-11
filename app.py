@@ -11,7 +11,7 @@ def get_base64(file):
     f"""
     <style>
     .stApp {{
-        background-image: url("data:image/png;base64,{logo}");
+        background-image: url("png;base64,{logo}");
         background-repeat: no-repeat;
         background-position: center;
         background-size: 450px;
