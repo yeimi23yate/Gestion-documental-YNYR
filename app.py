@@ -38,9 +38,7 @@ st.set_page_config(
     page_icon="📈",
     layout="wide"
 )
-import os
 
-st.image("logo.png", width=200)
 st.image("log_CCB.png", width=150)
 st.sidebar.title("🗃️ Gestión Documental")
 
