@@ -238,7 +238,63 @@ if menu == "🔄 Control de Versiones":
 # =====================================================
 # APROBACIONES
 # =====================================================
+if menu == "🔄 Workflow":
 
+    st.title("🔄 Workflow de Aprobación")
+
+    col1, col2 = st.columns([1,2])
+
+    with col1:
+
+        st.subheader("📋 Información")
+
+        st.write("**Documento:** CP Login")
+        st.write("**Versión:** 1.3")
+        st.write("**Responsable:** Analista QA")
+        st.write("**Estado:** En revisión")
+
+    with col2:
+
+        st.subheader("👁️ Vista previa")
+
+        st.info(
+            "Aquí se visualizará el documento antes de aprobarlo."
+        )
+
+        st.code(
+            '''
+CASO DE PRUEBA
+
+Objetivo:
+Validar autenticación de usuario.
+
+Precondiciones:
+Usuario registrado.
+
+Resultado esperado:
+Acceso exitoso.
+            '''
+        )
+
+    st.divider()
+
+    decision = st.selectbox(
+        "✅ Decisión",
+        [
+            "Aprobado",
+            "Rechazado"
+        ]
+    )
+
+    observaciones = st.text_area(
+        "📝 Observaciones"
+    )
+
+    if st.button("Enviar Decisión"):
+
+        st.success(
+            f"Documento {decision}"
+        )
 if menu == "✅ Documentos pendientes por aprobar":
 
     st.title("✅ Flujo de Aprobación")
