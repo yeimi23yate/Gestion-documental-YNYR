@@ -267,36 +267,23 @@ if menu == "✅ Aprobaciones":
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
             
-        # ==========================
-        # VISTA PREVIA VISUAL
-        # ==========================
-        with col2:
+# ==========================
+# VISTA PREVIA (SOLO DESCARGA)
+# ==========================
+with col2:
 
-            st.subheader("👁️ Vista previa del documento")
+    st.subheader("👁️ Vista previa del documento")
 
-                st.download_button(
-                    label="📥 Descargar PDF",
-                    data=doc["Contenido"],
-                    file_name=archivo_nombre,
-                    mime="application/pdf"
-                )
+    archivo_nombre = doc.get("NombreArchivo", "documento")
 
-                # ✅ FIX: PDF en base64 correcto
-                pdf_base64 = base64.b64encode(doc["Contenido"]).decode("utf-8")
+    st.info("📄 La vista previa se realiza mediante descarga del archivo.")
 
-                st.components.v1.html(
-                    f"""
-                    <iframe
-                        src="data:application/pdf;base64,{pdf_base64}"
-                        width="100%"
-                        height="500px">
-                    </iframe>
-                    """,
-                    height=500
-                )
-
-        st.divider()
-
+    st.download_button(
+        label="📥 Descargar documento",
+        data=doc["Contenido"],
+        file_name=archivo_nombre,
+        mime="application/octet-stream"
+    )
         # ==========================
         # OBSERVACIONES DEL REVISOR
         # ==========================
