@@ -37,8 +37,8 @@ menu = st.sidebar.selectbox(
         "🏠 Inicio",
         "📝 Registrar Documento",
         "📚 Repositorio Documental",
-        "🔄 Control de Versiones",
         "✅ Aprobaciones",
+        "🔄 Control de Versiones",
         "🔍 Consulta",
         "📊 Dashboard"
     ]
