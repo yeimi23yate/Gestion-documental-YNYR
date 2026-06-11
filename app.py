@@ -10,7 +10,15 @@ st.set_page_config(
     page_icon="📁",
     layout="wide"
 )
+# =====================================================
+# VARIABLES DE SESIÓN
+# =====================================================
 
+if "documentos" not in st.session_state:
+    st.session_state.documentos = []
+
+if "documento_pendiente" not in st.session_state:
+    st.session_state.documento_pendiente = None
 # =====================================================
 # ENCABEZADO
 # =====================================================
@@ -91,9 +99,7 @@ if menu == "📝 Registrar Documento":
 
     with col1:
 
-        nombre = st.text_input(
-            "Nombre del documento"
-        )
+        nombre = st.text_input("Nombre del documento")
 
         iniciativa = st.selectbox(
             "Iniciativa",
@@ -117,22 +123,21 @@ if menu == "📝 Registrar Documento":
 
     with col2:
 
-        version = st.text_input(
-            "Versión"
-        )
+        version = st.text_input("Versión")
 
-        responsable = st.text_input(
-            "Responsable"
-        )
+        responsable = st.text_input("Responsable")
 
         estado = st.selectbox(
             "Estado",
             [
                 "Borrador",
-                "En revisión",
-                "Aprobado"
+                "En revisión"
             ]
         )
+
+    contenido = st.text_area(
+        "Contenido del documento"
+    )
 
     archivo = st.file_uploader(
         "Adjuntar documento",
@@ -141,8 +146,17 @@ if menu == "📝 Registrar Documento":
 
     if st.button("Guardar Documento"):
 
+        st.session_state.documento_pendiente = {
+            "Documento": nombre,
+            "Versión": version,
+            "Responsable": responsable,
+            "Estado": "En revisión",
+            "Contenido": contenido,
+            "Observaciones": ""
+        }
+
         st.success(
-            "Documento registrado correctamente"
+            "Documento enviado al Workflow para aprobación."
         )
 
 # =====================================================
@@ -241,26 +255,20 @@ if menu == "🔄 Control de Versiones":
 
 if menu == "✅ Aprobaciones":
 
-    st.title("Aprobación Documental")
+    st.title("🔄 Workflow de Gestión Documental")
 
-    st.write("Documento: CP_Login")
+    if st.session_state.documento_pendiente is None:
 
-    estado = st.selectbox(
-        "Estado",
-        [
-            "Pendiente",
-            "Aprobado",
-            "Rechazado"
-        ]
-    )
-
-    st.write("Estado actual:", estado)
-
-    if st.button("Aprobar"):
-
-        st.success(
-            "Documento aprobado"
+        st.warning(
+            "No existen documentos pendientes por aprobar."
         )
+
+    else:
+
+        doc = st.session_state.documento_pendiente
+
+        st.info(
+            "📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado"
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
