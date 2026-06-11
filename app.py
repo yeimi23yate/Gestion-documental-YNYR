@@ -1,38 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-# =====================================
-# CONFIGURACIÓN DE PÁGINA
-# =====================================
-
 st.set_page_config(
     page_title="Gestión Documental",
     page_icon="📈",
     layout="wide"
 )
-
-# =====================================
-# MARCA DE AGUA
-# =====================================
-
-st.markdown("""
-<style>
-
-.stApp {
-    background-image: url("log_CCB.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 300px;
-    background-attachment: fixed;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# =====================================
-# MENÚ LATERAL
-# =====================================
-
+st.image("log_CCB.png", width=150)
 st.sidebar.title("🗃️ Gestión Documental")
 
 menu = st.sidebar.selectbox(
@@ -46,17 +20,7 @@ menu = st.sidebar.selectbox(
         "📊 Dashboard"
     ]
 )
-
-# =====================================
-# INICIO
-# =====================================
-
 if menu == "🏠 Inicio":
-
-    col1, col2, col3 = st.columns([1,2,1])
-
-    with col2:
-        st.image("log_CCB.png", width=180)
 
     st.title("Documentación de Iniciativas IT")
 
@@ -73,25 +37,24 @@ if menu == "🏠 Inicio":
     Este prototipo permite:
 
     🚀 Centralizar documentación
-
+    
     🚀 Controlar versiones
-
+    
     🚀 Gestionar aprobaciones
-
+    
     🚀 Consultar información actualizada
-
+    
     🚀 Visualizar indicadores
+    
     """)
-
-# =====================================
-# REGISTRO DOCUMENTO
-# =====================================
 
 if menu == "📝 Registrar Documento":
 
     st.title("Registro de Documento")
 
-    nombre = st.text_input("Nombre del documento")
+    nombre = st.text_input(
+        "Nombre del documento"
+    )
 
     tipo = st.selectbox(
         "Tipo de documento",
@@ -105,14 +68,15 @@ if menu == "📝 Registrar Documento":
 
     version = st.text_input("Versión")
 
-    responsable = st.text_input("Responsable")
+    responsable = st.text_input(
+        "Responsable"
+    )
 
     if st.button("Guardar Documento"):
-        st.success("Documento registrado correctamente")
 
-# =====================================
-# VERSIONES
-# =====================================
+        st.success(
+            "Documento registrado correctamente"
+        )
 
 if menu == "🔄 Control de Versiones":
 
@@ -129,11 +93,10 @@ if menu == "🔄 Control de Versiones":
     st.write("Versión actual: 1.0")
 
     if st.button("Crear Nueva Versión"):
-        st.success("Nueva versión creada: 1.1")
 
-# =====================================
-# APROBACIONES
-# =====================================
+        st.success(
+            "Nueva versión creada: 1.1"
+        )
 
 if menu == "✅ Aprobaciones":
 
@@ -153,43 +116,59 @@ if menu == "✅ Aprobaciones":
     st.write("Estado actual:", estado)
 
     if st.button("Aprobar"):
-        st.success("Documento aprobado")
 
-# =====================================
-# CONSULTA
-# =====================================
+        st.success(
+            "Documento aprobado"
+        )
 
 if menu == "🔍 Consulta":
 
     st.title("Consulta Documental")
 
-    buscar = st.text_input("Buscar Documento")
+    buscar = st.text_input(
+        "Buscar Documento"
+    )
 
     if buscar:
 
         st.table({
-            "Documento": ["CP_Login"],
-            "Versión": ["1.1"],
-            "Estado": ["Aprobado"]
+            "Documento":["CP_Login"],
+            "Versión":["1.1"],
+            "Estado":["Aprobado"]
         })
-
-# =====================================
-# DASHBOARD
-# =====================================
 
 if menu == "📊 Dashboard":
 
     st.title("Indicadores")
 
-    col1, col2, col3 = st.columns(3)
+    col1,col2,col3 = st.columns(3)
 
-    col1.metric("Documentos", "25")
-    col2.metric("Aprobados", "20")
-    col3.metric("Pendientes", "5")
+    col1.metric(
+        "Documentos",
+        "25"
+    )
+
+    col2.metric(
+        "Aprobados",
+        "20"
+    )
+
+    col3.metric(
+        "Pendientes",
+        "5"
+    )
 
     datos = pd.DataFrame({
-        "Estado": ["Aprobados", "Pendientes"],
-        "Cantidad": [20, 5]
+        "Estado":[
+            "Aprobados",
+            "Pendientes"
+        ],
+        "Cantidad":[
+            20,
+            5
+        ]
     })
 
-    st.bar_chart(datos.set_index("Estado"))
+    st.bar_chart(
+        datos.set_index("Estado")
+    )
