@@ -307,9 +307,9 @@ if menu == "✅ Aprobaciones":
         # ACCIONES
         # ==========================
 
-colA, colB = st.columns(2)
+    colA, colB = st.columns(2)
 
-with colA:
+    with colA:
 
     if st.button("📤 Aprobar documento"):
 
