@@ -261,7 +261,6 @@ if menu == "✅ Aprobaciones":
         st.success(
             "Documento aprobado"
         )
-
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
