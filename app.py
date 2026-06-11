@@ -6,7 +6,7 @@ st.set_page_config(
     page_icon="📁",
     layout="wide"
 )
-st.sidebar.image("logo_azure.jpg", width=120)
+st.sidebar.image("logo_azure.jpg", width=120) st.sidebar.image("log_CCB.png", width=120)
 st.sidebar.title("📁 Gestión Documental")
 
 menu = st.sidebar.selectbox(
