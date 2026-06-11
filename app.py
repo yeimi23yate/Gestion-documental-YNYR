@@ -29,18 +29,16 @@ logo = get_base64("logo.png")
 # ESTILOS - MARCA DE AGUA
 # =====================================================
 
-st.markdown("""
-<style>
-
-.stApp {
-    background-image: url('./logo.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 250px;
-}
-
-</style>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <style>
+    img {
+        opacity: 0.08;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # =====================================================
 # ENCABEZADO
