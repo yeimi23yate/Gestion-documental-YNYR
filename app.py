@@ -39,6 +39,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+st.image("logo.png", width=150)
 
 # =====================================================
 # ENCABEZADO
