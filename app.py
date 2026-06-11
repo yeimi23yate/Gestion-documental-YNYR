@@ -6,6 +6,9 @@ st.set_page_config(
     page_icon="📁",
     layout="wide"
 )
+col1 = st.sidebar.columns(1)
+
+with col1:
 st.image("log_CCB.png", width=120)
 st.sidebar.title("📁 Gestión Documental")
 
