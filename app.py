@@ -9,7 +9,7 @@ st.set_page_config(
 col1 = st.sidebar.columns(1)
 
 with col1:
-st.image("log_CCB.png", width=120)
+    st.image("log_CCB.png", width=150)
 st.sidebar.title("📁 Gestión Documental")
 
 menu = st.sidebar.selectbox(
