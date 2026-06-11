@@ -266,39 +266,47 @@ if menu == "✅ Aprobaciones":
             st.write(f"**Versión:** {doc['Versión']}")
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
-            
-# ==========================
-# VISTA PREVIA (SOLO DESCARGA)
-# ==========================
-with col2:
 
-    st.subheader("👁️ Vista previa del documento")
+            if "Observaciones" in doc:
+                st.write("**Observaciones anteriores:**")
+                st.info(doc["Observaciones"])
 
-    archivo_nombre = doc.get("NombreArchivo", "documento")
-
-    st.info("📄 La vista previa se realiza mediante descarga del archivo.")
-
-    st.download_button(
-        label="📥 Descargar documento",
-        data=doc["Contenido"],
-        file_name=archivo_nombre,
-        mime="application/octet-stream"
-    )
         # ==========================
-        # OBSERVACIONES DEL REVISOR
+        # DESCARGA (VISTA PREVIA)
         # ==========================
+        with col2:
+
+            st.subheader("👁️ Vista previa del documento")
+
+            archivo_nombre = doc.get("NombreArchivo", "documento")
+
+            st.info("📄 Vista previa mediante descarga del archivo")
+
+            st.download_button(
+                label="📥 Descargar documento",
+                data=doc["Contenido"],
+                file_name=archivo_nombre,
+                mime="application/octet-stream"
+            )
+
+        st.divider()
+
+        # ==========================
+        # OBSERVACIONES
+        # ==========================
+
         st.subheader("📝 Observaciones del Revisor")
 
         observaciones = st.text_area(
-            "Escribe observaciones sobre el documento",
-            placeholder="Ej: Ajustar formato, corregir versión, validar contenido..."
+            "Escribe observaciones sobre el documento"
         )
 
         st.divider()
 
         # ==========================
-        # ACCIONES DEL FLUJO
+        # ACCIONES
         # ==========================
+
         colA, colB = st.columns(2)
 
         with colA:
@@ -310,7 +318,7 @@ with col2:
 
                 st.session_state.documento_pendiente = doc
 
-                st.success("📤 Documento enviado a revisión correctamente.")
+                st.success("Documento enviado a revisión.")
 
         with colB:
 
@@ -321,7 +329,7 @@ with col2:
 
                 st.session_state.documento_pendiente = None
 
-                st.error("❌ Documento rechazado. Requiere ajustes.")
+                st.error("Documento rechazado.")
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
