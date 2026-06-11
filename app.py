@@ -270,21 +270,53 @@ if menu == "✅ Aprobaciones":
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
 
-        # Vista previa
+       # Vista previa
+with col2:
 
-        with col2:
+    st.subheader("👁️ Vista previa del documento")
 
-            st.subheader("👁️ Vista previa")
+    archivo_nombre = doc.get("NombreArchivo", "documento")
 
-            st.text_area(
-                "Contenido",
-                doc["Contenido"],
-                height=300,
-                disabled=True
-            )
+    # ==========================
+    # SI ES PDF → VISTA VISUAL
+    # ==========================
+    if archivo_nombre.endswith(".pdf"):
 
-        st.divider()
+        st.download_button(
+            label="📥 Descargar PDF",
+            data=doc["Contenido"],
+            file_name=archivo_nombre,
+            mime="application/pdf"
+        )
 
+        # Vista embebida (visual)
+        st.write("📄 Vista previa del PDF:")
+        st.pdf = doc["Contenido"]
+
+        st.markdown(
+            f"""
+            <iframe
+                src="data:application/pdf;base64,{doc['Contenido'].hex()}"
+                width="100%"
+                height="500px"
+                type="application/pdf">
+            </iframe>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # ==========================
+    # OTROS ARCHIVOS
+    # ==========================
+    else:
+
+        st.info("Este tipo de archivo no se puede previsualizar visualmente.")
+
+        st.download_button(
+            label="📥 Descargar documento",
+            data=doc["Contenido"],
+            file_name=archivo_nombre
+        )
         observaciones = st.text_area(
             "📝 Observaciones del Revisor"
         )
