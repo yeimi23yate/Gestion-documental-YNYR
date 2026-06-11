@@ -30,7 +30,7 @@ menu = st.sidebar.selectbox(
         "📝 Registrar Documento",
         "📚 Repositorio Documental",
         "🔄 Control de Versiones",
-        "✅ Aprobaciones",
+        "✅ WorkFlow",
         "🔍 Consulta",
         "📊 Dashboard"
     ]
@@ -239,7 +239,7 @@ if menu == "🔄 Control de Versiones":
 # APROBACIONES
 # =====================================================
 
-if menu == "✅ WorkFlow":
+if menu == "✅ Documentos pendientes por aprobar":
 
     st.title("✅ Flujo de Aprobación")
 
