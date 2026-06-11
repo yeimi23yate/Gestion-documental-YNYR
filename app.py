@@ -239,96 +239,29 @@ if menu == "🔄 Control de Versiones":
 # APROBACIONES
 # =====================================================
 
-if menu == "✅ Documentos pendientes por aprobar":
+if menu == "✅ Aprobaciones":
 
-    st.title("🔄 Workflow de Gestión Documental")
+    st.title("Aprobación Documental")
 
-    st.info(
-        "📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado"
-    )
+    st.write("Documento: CP_Login")
 
-    st.progress(75)
-
-    st.divider()
-
-    col1, col2 = st.columns([1, 2])
-
-    # Información del documento
-
-    with col1:
-
-        st.subheader("📋 Información del Documento")
-
-        st.write("**Documento:** CP Login")
-        st.write("**Versión:** 1.3")
-        st.write("**Responsable:** Analista QA")
-        st.write("**Estado:** En revisión")
-        st.write("**Fecha creación:** 10/06/2026")
-        st.write("**Repositorio:** Azure DevOps")
-
-    # Vista previa del documento
-
-    with col2:
-
-        st.subheader("👁️ Vista previa")
-
-        st.text_area(
-            "Contenido del documento",
-            """
-CASO DE PRUEBA
-
-Objetivo:
-Validar la autenticación del usuario.
-
-Precondiciones:
-- Usuario registrado.
-- Credenciales activas.
-
-Flujo Principal:
-1. Ingresar usuario.
-2. Ingresar contraseña.
-3. Hacer clic en Ingresar.
-
-Resultado Esperado:
-El sistema permite el acceso exitoso.
-            """,
-            height=300,
-            disabled=True
-        )
-
-    st.divider()
-
-    st.subheader("📝 Gestión de aprobación")
-
-    decision = st.selectbox(
-        "Decisión",
+    estado = st.selectbox(
+        "Estado",
         [
+            "Pendiente",
             "Aprobado",
             "Rechazado"
         ]
     )
 
-    observaciones = st.text_area(
-        "Observaciones del revisor"
-    )
+    st.write("Estado actual:", estado)
 
-    col1, col2 = st.columns(2)
+    if st.button("Aprobar"):
 
-    with col1:
+        st.success(
+            "Documento aprobado"
+        )
 
-        if st.button("✅ Aprobar Documento"):
-
-            st.success(
-                "Documento aprobado y publicado en el repositorio documental."
-            )
-
-    with col2:
-
-        if st.button("❌ Rechazar Documento"):
-
-            st.error(
-                "Documento rechazado. Se requiere ajuste por parte del responsable."
-            )
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
