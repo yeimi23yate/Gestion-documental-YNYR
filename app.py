@@ -30,7 +30,7 @@ menu = st.sidebar.selectbox(
         "📝 Registrar Documento",
         "📚 Repositorio Documental",
         "🔄 Control de Versiones",
-        "✅ WorkFlow",
+        "✅ Aprobaciones",
         "🔍 Consulta",
         "📊 Dashboard"
     ]
