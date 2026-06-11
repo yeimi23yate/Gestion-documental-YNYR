@@ -86,11 +86,9 @@ if menu == "🏠 Inicio":
 
     ✅ Indicadores para la toma de decisiones
     """)
-st.title("📝 Registro de Documento")
+if menu == "📝 Registrar Documento":
 
-    # ================================
-    # CAMPOS DEL FORMULARIO
-    # ================================
+    st.title("📝 Registro de Documento")
 
     nombre = st.text_input("Nombre del documento")
 
@@ -108,20 +106,12 @@ st.title("📝 Registro de Documento")
 
     responsable = st.text_input("Responsable")
 
-    # ================================
-    # CARGUE DE ARCHIVO
-    # ================================
-
     archivo = st.file_uploader(
         "📎 Adjuntar documento",
         type=["pdf", "docx", "xlsx", "txt"]
     )
 
     st.divider()
-
-    # ================================
-    # BOTÓN ENVIAR A FLUJO
-    # ================================
 
     if st.button("📤 Enviar a revisión"):
 
@@ -133,20 +123,16 @@ st.title("📝 Registro de Documento")
                 "Versión": version,
                 "Responsable": responsable,
                 "Estado": "Registrado",
-
-                # contenido del archivo (binario)
                 "Contenido": archivo.read(),
                 "NombreArchivo": archivo.name
             }
 
-            # Enviar al flujo de aprobación
             st.session_state.documento_pendiente = documento
 
-            st.success("✅ Documento enviado correctamente al flujo de aprobación.")
+            st.success("Documento enviado correctamente al flujo de aprobación.")
 
         else:
-            st.warning("⚠️ Por favor completa todos los campos y adjunta un archivo.")
-
+            st.warning("Completa todos los campos y adjunta un archivo.")
 # =====================================================
 # REPOSITORIO DOCUMENTAL
 # =====================================================
