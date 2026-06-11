@@ -233,6 +233,8 @@ if menu == "🔄 Control de Versiones":
 
 if menu == "✅ Aprobaciones":
 
+    import base64
+
     st.title("🔄 Workflow de Gestión Documental")
 
     if st.session_state.documento_pendiente is None:
@@ -265,7 +267,6 @@ if menu == "✅ Aprobaciones":
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
 
-            # Observaciones previas si existen
             if "Observaciones" in doc:
                 st.write("**Observaciones anteriores:**")
                 st.info(doc["Observaciones"])
@@ -288,10 +289,13 @@ if menu == "✅ Aprobaciones":
                     mime="application/pdf"
                 )
 
+                # ✅ FIX: PDF en base64 correcto
+                pdf_base64 = base64.b64encode(doc["Contenido"]).decode("utf-8")
+
                 st.components.v1.html(
                     f"""
                     <iframe
-                        src="data:application/pdf;base64,{doc['Contenido'].decode() if isinstance(doc['Contenido'], bytes) else doc['Contenido']}"
+                        src="data:application/pdf;base64,{pdf_base64}"
                         width="100%"
                         height="500px">
                     </iframe>
@@ -302,6 +306,7 @@ if menu == "✅ Aprobaciones":
             else:
 
                 st.info("📄 Este archivo no tiene vista previa visual disponible.")
+
                 st.download_button(
                     "📥 Descargar documento",
                     data=doc["Contenido"],
