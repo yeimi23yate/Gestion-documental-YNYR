@@ -231,36 +231,31 @@ if menu == "🔄 Control de Versiones":
                 f"Se ha generado una nueva versión basada en la versión {documento['Versión']}."
             )
 
-# =====================================================
-# APROBACIONES
-# =====================================================
-
 if menu == "✅ Aprobaciones":
 
     st.title("🔄 Workflow de Gestión Documental")
 
     if st.session_state.documento_pendiente is None:
 
-        st.warning(
-            "No existen documentos pendientes por aprobar."
-        )
+        st.warning("No existen documentos pendientes por aprobar.")
 
     else:
 
         doc = st.session_state.documento_pendiente
 
-        st.info(
-            "📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado"
-        )
-
-        st.progress(75)
+        # ==========================
+        # FLUJO
+        # ==========================
+        st.info("📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado")
+        st.progress(50)
 
         st.divider()
 
         col1, col2 = st.columns([1, 2])
 
-        # Información del documento
-
+        # ==========================
+        # INFORMACIÓN
+        # ==========================
         with col1:
 
             st.subheader("📋 Información del Documento")
@@ -270,65 +265,89 @@ if menu == "✅ Aprobaciones":
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
 
-       # Vista previa
-with col2:
+            # Observaciones previas si existen
+            if "Observaciones" in doc:
+                st.write("**Observaciones anteriores:**")
+                st.info(doc["Observaciones"])
 
-    st.subheader("👁️ Vista previa del documento")
+        # ==========================
+        # VISTA PREVIA VISUAL
+        # ==========================
+        with col2:
 
-    archivo_nombre = doc.get("NombreArchivo", "documento")
+            st.subheader("👁️ Vista previa del documento")
 
-    # ==========================
-    # SI ES PDF → VISTA VISUAL
-    # ==========================
-    if archivo_nombre.endswith(".pdf"):
+            archivo_nombre = doc.get("NombreArchivo", "")
 
-        st.download_button(
-            label="📥 Descargar PDF",
-            data=doc["Contenido"],
-            file_name=archivo_nombre,
-            mime="application/pdf"
-        )
+            if archivo_nombre.endswith(".pdf"):
 
-    # ==========================
-    # OTROS ARCHIVOS
-    # ==========================
-    else:
-
-        st.info("Este tipo de archivo no se puede previsualizar visualmente.")
-
-        st.download_button(
-            label="📥 Descargar documento",
-            data=doc["Contenido"],
-            file_name=archivo_nombre
-        )
-        observaciones = st.text_area(
-            "📝 Observaciones del Revisor"
-        )
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-
-            if st.button("✅ Aprobar Documento"):
-
-                doc["Estado"] = "Aprobado"
-                doc["Observaciones"] = observaciones
-
-                st.session_state.documentos.append(doc)
-
-                st.session_state.documento_pendiente = None
-
-                st.success(
-                    "Documento aprobado y publicado en el repositorio documental."
+                st.download_button(
+                    label="📥 Descargar PDF",
+                    data=doc["Contenido"],
+                    file_name=archivo_nombre,
+                    mime="application/pdf"
                 )
 
-        with col2:
+                st.components.v1.html(
+                    f"""
+                    <iframe
+                        src="data:application/pdf;base64,{doc['Contenido'].decode() if isinstance(doc['Contenido'], bytes) else doc['Contenido']}"
+                        width="100%"
+                        height="500px">
+                    </iframe>
+                    """,
+                    height=500
+                )
+
+            else:
+
+                st.info("📄 Este archivo no tiene vista previa visual disponible.")
+                st.download_button(
+                    "📥 Descargar documento",
+                    data=doc["Contenido"],
+                    file_name=archivo_nombre
+                )
+
+        st.divider()
+
+        # ==========================
+        # OBSERVACIONES DEL REVISOR
+        # ==========================
+        st.subheader("📝 Observaciones del Revisor")
+
+        observaciones = st.text_area(
+            "Escribe observaciones sobre el documento",
+            placeholder="Ej: Ajustar formato, corregir versión, validar contenido..."
+        )
+
+        st.divider()
+
+        # ==========================
+        # ACCIONES DEL FLUJO
+        # ==========================
+        colA, colB = st.columns(2)
+
+        with colA:
+
+            if st.button("📤 Enviar a revisión"):
+
+                doc["Estado"] = "En revisión"
+                doc["Observaciones"] = observaciones
+
+                st.session_state.documento_pendiente = doc
+
+                st.success("📤 Documento enviado a revisión correctamente.")
+
+        with colB:
 
             if st.button("❌ Rechazar Documento"):
 
-                st.error(
-                    "Documento rechazado. Se requiere ajuste por parte del responsable."
-                )
+                doc["Estado"] = "Rechazado"
+                doc["Observaciones"] = observaciones
+
+                st.session_state.documento_pendiente = None
+
+                st.error("❌ Documento rechazado. Requiere ajustes.")
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
