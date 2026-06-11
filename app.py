@@ -88,7 +88,7 @@ if menu == "🏠 Inicio":
     """)
 
 # =====================================================
-# REGISTRO DOCUMENTAL
+# REPOSITORIO DOCUMENTAL
 # =====================================================
 
 if menu == "📚 Repositorio Documental":
@@ -111,7 +111,6 @@ if menu == "📚 Repositorio Documental":
             documentos,
             use_container_width=True
         )
-
 # =====================================================
 # REPOSITORIO DOCUMENTAL
 # =====================================================
