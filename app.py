@@ -304,38 +304,46 @@ if menu == "✅ Aprobaciones":
         st.divider()
 
         # ==========================
+        # OBSERVACIONES
+        # ==========================
+
+        st.subheader("📝 Observaciones del Revisor")
+
+        observaciones = st.text_area(
+            "Escribe observaciones sobre el documento"
+        )
+
+        st.divider()
+
+        # ==========================
         # ACCIONES
         # ==========================
 
-    colA, colB = st.columns(2)
+        colA, colB = st.columns(2)
 
-    with colA:
+        with colA:
 
-    if st.button("📤 Aprobar documento"):
+            if st.button("📤 Aprobar documento"):
 
-        # ✅ CAMBIO REAL DE ESTADO
-        doc["Estado"] = "Aprobado"
-        doc["Observaciones"] = observaciones
+                doc["Estado"] = "Aprobado"
+                doc["Observaciones"] = observaciones
 
-        # 📚 PASA AL REPOSITORIO
-        st.session_state.documentos.append(doc)
+                st.session_state.documentos.append(doc)
 
-        # 🧹 SE LIMPIA PENDIENTE (flujo avanza)
-        st.session_state.documento_pendiente = None
+                st.session_state.documento_pendiente = None
 
-        st.success("✅ Documento aprobado y publicado en el repositorio.")
+                st.success("✅ Documento aprobado y publicado en el repositorio.")
 
-with colB:
+        with colB:
 
-    if st.button("❌ Rechazar Documento"):
+            if st.button("❌ Rechazar Documento"):
 
-        doc["Estado"] = "Rechazado"
-        doc["Observaciones"] = observaciones
+                doc["Estado"] = "Rechazado"
+                doc["Observaciones"] = observaciones
 
-        # ❌ NO VA AL REPOSITORIO
-        st.session_state.documento_pendiente = None
+                st.session_state.documento_pendiente = None
 
-        st.error("❌ Documento rechazado y devuelto al flujo.")
+                st.error("❌ Documento rechazado.")
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
