@@ -269,6 +269,7 @@ if menu == "✅ Aprobaciones":
 
         st.info(
             "📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado"
+         )           
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
