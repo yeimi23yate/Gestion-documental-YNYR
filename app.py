@@ -20,7 +20,6 @@ menu = st.sidebar.selectbox(
         "📊 Dashboard"
     ]
 )
-
 if menu == "🏠 Inicio":
 
 st.title("Documentación de Iniciativas IT")
