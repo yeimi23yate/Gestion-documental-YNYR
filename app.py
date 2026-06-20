@@ -289,35 +289,44 @@ if menu == "📊 Dashboard":
 
     st.divider()
 
-    # =====================================================
-    # PORCENTAJES
-    # =====================================================
-    if total > 0:
-        st.subheader("📈 Distribución del flujo")
+# =====================================================
+# PORCENTAJES + GRÁFICO CON COLORES
+# =====================================================
+if total > 0:
+    st.subheader("📈 Distribución del flujo (Azure DevOps style)")
 
-        data = pd.DataFrame({
-            "Estado": ["Pendientes", "Aprobados", "Rechazados"],
-            "Cantidad": [pendientes, aprobados, rechazados]
-        })
+    data = pd.DataFrame({
+        "Estado": ["Pendientes", "Aprobados", "Rechazados"],
+        "Cantidad": [pendientes, aprobados, rechazados]
+    })
 
-        st.bar_chart(data.set_index("Estado"))
-
-        st.subheader("🥧 Distribución porcentual")
-
-        data["%"] = data["Cantidad"] / total * 100
-        st.dataframe(data, use_container_width=True)
-
-    else:
-        st.info("No hay datos para mostrar el dashboard aún.")
+    data["%"] = (data["Cantidad"] / total * 100).round(2)
 
     # =====================================================
-    # SIMULACIÓN TIPO AZURE DEVOPS FLOW
+    # COLORES TIPO AZURE DEVOPS
     # =====================================================
-    st.subheader("🔄 Flujo tipo pipeline")
-
-    st.progress(
-        aprobados / total if total > 0 else 0
+    color_scale = alt.Scale(
+        domain=["Pendientes", "Aprobados", "Rechazados"],
+        range=["#FFB020", "#2ECC71", "#E74C3C"]  # naranja, verde, rojo
     )
+
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("Estado:N", title="Estado"),
+        y=alt.Y("Cantidad:Q", title="Cantidad"),
+        color=alt.Color("Estado:N", scale=color_scale),
+        tooltip=["Estado", "Cantidad", "%"]
+    )
+
+    st.altair_chart(chart, use_container_width=True)
+
+    # =====================================================
+    # TABLA DE CONTROL
+    # =====================================================
+    st.subheader("📊 Distribución porcentual")
+    st.dataframe(data, use_container_width=True)
+
+else:
+    st.info("No hay datos para mostrar el dashboard aún.")
 
 # =====================================================
 # AUDITORÍA
