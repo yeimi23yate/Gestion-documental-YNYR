@@ -133,19 +133,54 @@ if menu == "📝 Registrar Documento":
 # =====================================================
 if menu == "✅ Aprobaciones":
 
-    st.title("🔄 Flujo de Aprobación")
+    st.title("🔄 Documentos pendientes de aprobación")
 
-    if len(st.session_state.db["pendientes"]) == 0:
-        st.warning("No hay documentos pendientes")
+    pendientes = st.session_state.db["pendientes"]
+
+    if len(pendientes) == 0:
+        st.warning("No hay documentos pendientes de gestión")
     else:
 
-        doc = st.session_state.db["pendientes"][0]
+        # =====================================================
+        # CONVERTIR A DATAFRAME (tipo Azure DevOps grid)
+        # =====================================================
+        df = pd.DataFrame(pendientes)
 
+        df_mostrar = df[[
+            "Documento",
+            "Tipo",
+            "Version",
+            "Responsable",
+            "Estado",
+            "Fecha"
+        ]]
+
+        st.subheader("📋 Backlog de documentos")
+
+        # =====================================================
+        # SELECCIÓN DE DOCUMENTO
+        # =====================================================
+        seleccion = st.selectbox(
+            "Seleccione el documento a gestionar",
+            df_mostrar["Documento"].tolist()
+        )
+
+        doc = next(
+            (d for d in pendientes if d["Documento"] == seleccion),
+            None
+        )
+
+        st.divider()
+
+        # =====================================================
+        # DETALLE DEL DOCUMENTO
+        # =====================================================
         col1, col2 = st.columns(2)
 
         with col1:
-            st.subheader("📄 Documento")
+            st.subheader("📄 Detalle")
             st.write(f"**Nombre:** {doc['Documento']}")
+            st.write(f"**Tipo:** {doc['Tipo']}")
             st.write(f"**Versión:** {doc['Version']}")
             st.write(f"**Responsable:** {doc['Responsable']}")
             st.write(f"**Estado:** {doc['Estado']}")
@@ -161,20 +196,25 @@ if menu == "✅ Aprobaciones":
                     mime="application/octet-stream"
                 )
 
+        st.divider()
+
+        # =====================================================
+        # ACCIONES (APPROVE / REJECT)
+        # =====================================================
         aprobador = st.text_input("Aprobador")
         observaciones = st.text_area("Observaciones")
 
         colA, colB = st.columns(2)
 
         with colA:
-            if st.button("Aprobar"):
+            if st.button("✅ Aprobar"):
 
                 doc["Estado"] = "Aprobado"
                 doc["Aprobador"] = aprobador
                 doc["Observaciones"] = observaciones
 
                 st.session_state.db["aprobados"].append(doc)
-                st.session_state.db["pendientes"].pop(0)
+                st.session_state.db["pendientes"].remove(doc)
 
                 pd.DataFrame(st.session_state.db["aprobados"]).to_csv(
                     "documentos.csv", index=False
@@ -182,21 +222,21 @@ if menu == "✅ Aprobaciones":
 
                 registrar_auditoria("APROBACIÓN", doc["Documento"], aprobador)
 
-                st.success("Documento aprobado")
+                st.success(f"Documento '{doc['Documento']}' aprobado")
 
         with colB:
-            if st.button("Rechazar"):
+            if st.button("❌ Rechazar"):
 
                 doc["Estado"] = "Rechazado"
                 doc["Aprobador"] = aprobador
                 doc["Observaciones"] = observaciones
 
                 st.session_state.db["rechazados"].append(doc)
-                st.session_state.db["pendientes"].pop(0)
+                st.session_state.db["pendientes"].remove(doc)
 
                 registrar_auditoria("RECHAZO", doc["Documento"], aprobador)
 
-                st.error("Documento rechazado")
+                st.error(f"Documento '{doc['Documento']}' rechazado")
 
 # =====================================================
 # REPOSITORIO
