@@ -379,7 +379,8 @@ if menu == "✅ Aprobaciones":
         st.subheader("📝 Observaciones del Revisor")
 
         observaciones = st.text_area(
-            "Escribe observaciones sobre el documento"
+        "Escribe observaciones sobre el documento",
+        key="observaciones_workflow"
         )
 
         st.divider()
