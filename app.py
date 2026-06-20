@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+from datetime import datetime
+import os
+
 # =====================================================
 # CONFIGURACIÓN DE PÁGINA
 # =====================================================
@@ -41,8 +44,86 @@ menu = st.sidebar.selectbox(
         "🔄 Control de Versiones",
         "🔍 Consulta",
         "📊 Dashboard"
+        "📜 Auditoría"
     ]
 )
+# =====================================================
+# CREACIÓN DE ARCHIVOS
+# =====================================================
+
+if not os.path.exists("documentos.csv"):
+
+    pd.DataFrame(
+        columns=[
+            "Documento",
+            "Version",
+            "Responsable",
+            "Estado",
+            "Contenido",
+            "Observaciones"
+        ]
+    ).to_csv(
+        "documentos.csv",
+        index=False
+    )
+
+if not os.path.exists("auditoria.csv"):
+
+    pd.DataFrame(
+        columns=[
+            "Fecha",
+            "Accion",
+            "Documento",
+            "Usuario"
+        ]
+    ).to_csv(
+        "auditoria.csv",
+        index=False
+    )
+
+if not os.path.exists("versiones.csv"):
+
+    pd.DataFrame(
+        columns=[
+            "Documento",
+            "Version",
+            "Fecha",
+            "Responsable",
+            "Descripcion"
+        ]
+    ).to_csv(
+        "versiones.csv",
+        index=False
+    )
+
+def registrar_auditoria(
+    accion,
+    documento,
+    usuario
+):
+
+    auditoria = pd.read_csv(
+        "auditoria.csv"
+    )
+
+    nuevo = pd.DataFrame(
+        [{
+            "Fecha": datetime.now(),
+            "Accion": accion,
+            "Documento": documento,
+            "Usuario": usuario
+        }]
+    )
+
+    auditoria = pd.concat(
+        [auditoria, nuevo],
+        ignore_index=True
+    )
+
+    auditoria.to_csv(
+        "auditoria.csv",
+        index=False
+    )
 
 # =====================================================
 # INICIO
@@ -445,6 +526,58 @@ if menu == "📊 Dashboard":
         ]
     })
 
-    st.bar_chart(
+    st.bar_chart( 
         estados.set_index("Estado")
+    )
+# =====================================================
+# AUDITORIA
+# =====================================================
+
+if menu == "📜 Auditoría":
+
+    st.title(
+        "📜 Historial de Auditoría"
+    )
+
+    auditoria = pd.read_csv(
+        "auditoria.csv"
+    )
+
+    registros_por_pagina = st.selectbox(
+        "Registros por página",
+        [5,10,20,50]
+    )
+
+    total_paginas = max(
+        1,
+        (
+            len(auditoria)
+            + registros_por_pagina
+            - 1
+        )
+        // registros_por_pagina
+    )
+
+    pagina = st.number_input(
+        "Página",
+        min_value=1,
+        max_value=total_paginas,
+        value=1
+    )
+
+    inicio = (
+        pagina - 1
+    ) * registros_por_pagina
+
+    fin = inicio + registros_por_pagina
+
+    st.dataframe(
+        auditoria.iloc[
+            inicio:fin
+        ],
+        use_container_width=True
+    )
+
+    st.write(
+        f"Página {pagina} de {total_paginas}"
     )
