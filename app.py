@@ -167,6 +167,11 @@ if menu == "🏠 Inicio":
 
     ✅ Indicadores para la toma de decisiones
     """)
+
+# =====================================================
+# REGISTRAR DOCUMENTO
+# =====================================================
+
 if menu == "📝 Registrar Documento":
 
     st.title("📝 Registro de Documento")
@@ -199,21 +204,29 @@ if menu == "📝 Registrar Documento":
         if nombre and version and responsable and archivo is not None:
 
             documento = {
-                "Documento": nombre,
-                "Tipo": tipo,
-                "Versión": version,
-                "Responsable": responsable,
-                "Estado": "Registrado",
-                "Contenido": archivo.read(),
-                "NombreArchivo": archivo.name
-            }
-
+    "Documento": nombre,
+    "Tipo": tipo,
+    "Versión": version,
+    "Responsable": responsable,
+    "Estado": "En revisión",
+    "Archivo": archivo.name if archivo else "",
+    "Aprobador": "",
+    "Observaciones": ""
+}
             st.session_state.documento_pendiente = documento
 
             st.success("Documento enviado correctamente al flujo de aprobación.")
 
         else:
             st.warning("Completa todos los campos y adjunta un archivo.")
+
+{
+    "Documento": nombre,
+    "Versión": version,
+    "Responsable": responsable,
+    "Estado": "En revisión"
+}
+
 # =====================================================
 # REPOSITORIO DOCUMENTAL
 # =====================================================
@@ -234,11 +247,60 @@ if menu == "📚 Repositorio Documental":
             st.session_state.documentos
         )
 
-        st.dataframe(
-            documentos,
-            use_container_width=True
+        # Selección de registros por página
+
+        registros_por_pagina = st.selectbox(
+            "Registros por página",
+            [5, 10, 20, 50],
+            key="repo_paginacion"
         )
 
+        total_paginas = max(
+            1,
+            (len(documentos) + registros_por_pagina - 1)
+            // registros_por_pagina
+        )
+
+        pagina = st.number_input(
+            "Página",
+            min_value=1,
+            max_value=total_paginas,
+            value=1,
+            key="repo_pagina"
+        )
+
+        inicio = (pagina - 1) * registros_por_pagina
+        fin = inicio + registros_por_pagina
+
+        # Columnas para mostrar
+
+        columnas = [
+            "Documento",
+            "Tipo",
+            "Versión",
+            "Responsable",
+            "Estado",
+            "Aprobador",
+            "Archivo",
+            "Observaciones"
+        ]
+
+        # Crear columnas faltantes si aún no existen
+
+        for col in columnas:
+
+            if col not in documentos.columns:
+                documentos[col] = ""
+
+        st.dataframe(
+            documentos[columnas].iloc[inicio:fin],
+            use_container_width=True,
+            hide_index=True
+        )
+
+        st.caption(
+            f"Página {pagina} de {total_paginas}"
+        )
 # =====================================================
 # CONTROL DE VERSIONES
 # =====================================================
@@ -304,6 +366,9 @@ if menu == "🔄 Control de Versiones":
             st.success(
                 f"Se ha generado una nueva versión basada en la versión {documento['Versión']}."
             )
+# ==========================
+# APROBACIONES
+# ==========================
 
 if menu == "✅ Aprobaciones":
 
@@ -344,6 +409,11 @@ if menu == "✅ Aprobaciones":
             if "Observaciones" in doc:
                 st.write("**Observaciones anteriores:**")
                 st.info(doc["Observaciones"])
+
+aprobador = st.text_input(
+    "Nombre del Aprobador",
+    key="aprobador_workflow"
+)
 
         # ==========================
         # DESCARGA (VISTA PREVIA)
