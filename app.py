@@ -209,8 +209,17 @@ if menu == "📚 Repositorio":
 
     if df.empty:
         st.info("No hay documentos aprobados")
+
     else:
-        st.dataframe(df, use_container_width=True)
+        # =====================================================
+        # OCULTAR COLUMNA ARCHIVO (BLOQUE CORRECTO)
+        # =====================================================
+        df_mostrar = df.drop(columns=["Archivo"], errors="ignore")
+
+        st.dataframe(
+            df_mostrar,
+            use_container_width=True
+        )
 
 # =====================================================
 # DASHBOARD
