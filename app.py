@@ -226,13 +226,55 @@ if menu == "📚 Repositorio":
 # =====================================================
 if menu == "📊 Dashboard":
 
-    st.title("📊 Indicadores")
+    st.title("📊 Indicadores tipo Azure DevOps")
 
-    col1, col2, col3 = st.columns(3)
+    pendientes = len(st.session_state.db["pendientes"])
+    aprobados = len(st.session_state.db["aprobados"])
+    rechazados = len(st.session_state.db["rechazados"])
 
-    col1.metric("Pendientes", len(st.session_state.db["pendientes"]))
-    col2.metric("Aprobados", len(st.session_state.db["aprobados"]))
-    col3.metric("Rechazados", len(st.session_state.db["rechazados"]))
+    total = pendientes + aprobados + rechazados
+
+    # =====================================================
+    # KPIs PRINCIPALES
+    # =====================================================
+    col1, col2, col3, col4 = st.columns(4)
+
+    col1.metric("📌 Total documentos", total)
+    col2.metric("🟡 Pendientes", pendientes)
+    col3.metric("🟢 Aprobados", aprobados)
+    col4.metric("🔴 Rechazados", rechazados)
+
+    st.divider()
+
+    # =====================================================
+    # PORCENTAJES
+    # =====================================================
+    if total > 0:
+        st.subheader("📈 Distribución del flujo")
+
+        data = pd.DataFrame({
+            "Estado": ["Pendientes", "Aprobados", "Rechazados"],
+            "Cantidad": [pendientes, aprobados, rechazados]
+        })
+
+        st.bar_chart(data.set_index("Estado"))
+
+        st.subheader("🥧 Distribución porcentual")
+
+        data["%"] = data["Cantidad"] / total * 100
+        st.dataframe(data, use_container_width=True)
+
+    else:
+        st.info("No hay datos para mostrar el dashboard aún.")
+
+    # =====================================================
+    # SIMULACIÓN TIPO AZURE DEVOPS FLOW
+    # =====================================================
+    st.subheader("🔄 Flujo tipo pipeline")
+
+    st.progress(
+        aprobados / total if total > 0 else 0
+    )
 
 # =====================================================
 # AUDITORÍA
