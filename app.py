@@ -418,7 +418,7 @@ aprobador = st.text_input(
         # ==========================
         # DESCARGA (VISTA PREVIA)
         # ==========================
-        with col2:
+with col2:
 
             st.subheader("👁️ Vista previa del documento")
 
