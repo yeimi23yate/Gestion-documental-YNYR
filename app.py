@@ -289,52 +289,42 @@ if menu == "📊 Dashboard":
 
     st.divider()
 
-# =====================================================
-# PORCENTAJES + GRÁFICO CON COLORES
-# =====================================================
-if total > 0:
-    st.subheader("📈 Distribución del flujo (Azure DevOps style)")
-
-    data = pd.DataFrame({
-        "Estado": ["Pendientes", "Aprobados", "Rechazados"],
-        "Cantidad": [pendientes, aprobados, rechazados]
-    })
-
-    data["%"] = (data["Cantidad"] / total * 100).round(2)
-
     # =====================================================
-    # COLORES TIPO AZURE DEVOPS
+    # GRÁFICO + PORCENTAJES
     # =====================================================
-    color_scale = alt.Scale(
-        domain=["Pendientes", "Aprobados", "Rechazados"],
-        range=["#FFB020", "#2ECC71", "#E74C3C"]  # naranja, verde, rojo
-    )
+    if total > 0:
 
-    chart = alt.Chart(data).mark_bar().encode(
-        x=alt.X("Estado:N", title="Estado"),
-        y=alt.Y("Cantidad:Q", title="Cantidad"),
-        color=alt.Color("Estado:N", scale=color_scale),
-        tooltip=["Estado", "Cantidad", "%"]
-    )
+        st.subheader("📈 Distribución del flujo (Azure DevOps style)")
 
-    st.altair_chart(chart, use_container_width=True)
+        data = pd.DataFrame({
+            "Estado": ["Pendientes", "Aprobados", "Rechazados"],
+            "Cantidad": [pendientes, aprobados, rechazados]
+        })
 
-    # =====================================================
-    # TABLA DE CONTROL
-    # =====================================================
-    st.subheader("📊 Distribución porcentual")
-    st.dataframe(data, use_container_width=True)
+        data["%"] = (data["Cantidad"] / total * 100).round(2)
 
-else:
-    st.info("No hay datos para mostrar el dashboard aún.")
+        # =====================================================
+        # COLORES TIPO AZURE DEVOPS
+        # =====================================================
+        color_scale = alt.Scale(
+            domain=["Pendientes", "Aprobados", "Rechazados"],
+            range=["#FFB020", "#2ECC71", "#E74C3C"]
+        )
 
-# =====================================================
-# AUDITORÍA
-# =====================================================
-if menu == "📜 Auditoría":
+        chart = alt.Chart(data).mark_bar().encode(
+            x=alt.X("Estado:N", title="Estado"),
+            y=alt.Y("Cantidad:Q", title="Cantidad"),
+            color=alt.Color("Estado:N", scale=color_scale),
+            tooltip=["Estado", "Cantidad", "%"]
+        )
 
-    st.title("📜 Historial de Auditoría")
+        st.altair_chart(chart, use_container_width=True)
 
-    df = pd.read_csv("auditoria.csv")
+        # =====================================================
+        # TABLA DETALLE
+        # =====================================================
+        st.subheader("📊 Distribución porcentual")
+        st.dataframe(data, use_container_width=True)
 
-    st.dataframe(df, use_container_width=True)
+    else:
+        st.info("No hay datos para mostrar el dashboard aún.")
