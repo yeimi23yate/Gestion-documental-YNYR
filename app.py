@@ -394,89 +394,111 @@ if menu == "✅ Aprobaciones":
 
         col1, col2 = st.columns([1, 2])
 
-        # ==========================
-        # INFORMACIÓN
-        # ==========================
-        with col1:
+ # ==========================
+# INFORMACIÓN
+# ==========================
 
-            st.subheader("📋 Información del Documento")
+with col1:
 
-            st.write(f"**Documento:** {doc['Documento']}")
-            st.write(f"**Versión:** {doc['Versión']}")
-            st.write(f"**Responsable:** {doc['Responsable']}")
-            st.write(f"**Estado:** {doc['Estado']}")
+    st.subheader("📋 Información del Documento")
 
-            if "Observaciones" in doc:
-                st.write("**Observaciones anteriores:**")
-                st.info(doc["Observaciones"])
+    st.write(f"**Documento:** {doc['Documento']}")
+    st.write(f"**Versión:** {doc['Versión']}")
+    st.write(f"**Responsable:** {doc['Responsable']}")
+    st.write(f"**Estado:** {doc['Estado']}")
+
+    if "Observaciones" in doc and doc["Observaciones"]:
+
+        st.write("**Observaciones anteriores:**")
+
+        st.info(doc["Observaciones"])
+
+# ==========================
+# VISTA PREVIA
+# ==========================
+
+with col2:
+
+    st.subheader("👁️ Vista previa del documento")
+
+    archivo_nombre = doc.get(
+        "NombreArchivo",
+        "documento"
+    )
+
+    st.info(
+        "📄 Vista previa mediante descarga del archivo"
+    )
+
+    st.download_button(
+        label="📥 Descargar documento",
+        data=doc["Contenido"],
+        file_name=archivo_nombre,
+        mime="application/octet-stream"
+    )
+
+st.divider()
+
+# ==========================
+# APROBADOR
+# ==========================
 
 aprobador = st.text_input(
     "Nombre del Aprobador",
     key="aprobador_workflow"
 )
 
-        # ==========================
-        # DESCARGA (VISTA PREVIA)
-        # ==========================
-with col2:
+# ==========================
+# OBSERVACIONES
+# ==========================
 
-            st.subheader("👁️ Vista previa del documento")
+st.subheader(
+    "📝 Observaciones del Revisor"
+)
 
-            archivo_nombre = doc.get("NombreArchivo", "documento")
+observaciones = st.text_area(
+    "Escribe observaciones sobre el documento",
+    key="observaciones_workflow"
+)
 
-            st.info("📄 Vista previa mediante descarga del archivo")
+st.divider()
 
-            st.download_button(
-                label="📥 Descargar documento",
-                data=doc["Contenido"],
-                file_name=archivo_nombre,
-                mime="application/octet-stream"
-            )
+# ==========================
+# ACCIONES
+# ==========================
 
-        st.divider()
+colA, colB = st.columns(2)
 
-        # ==========================
-        # OBSERVACIONES
-        # ==========================
+with colA:
 
-        st.subheader("📝 Observaciones del Revisor")
+    if st.button("📤 Aprobar documento"):
 
-        observaciones = st.text_area(
-        "Escribe observaciones sobre el documento",
-        key="observaciones_workflow"
+        doc["Estado"] = "Aprobado"
+        doc["Observaciones"] = observaciones
+        doc["Aprobador"] = aprobador
+
+        st.session_state.documentos.append(doc)
+
+        st.session_state.documento_pendiente = None
+
+        st.success(
+            "✅ Documento aprobado y publicado en el repositorio."
         )
 
-        st.divider()
+with colB:
 
-        # ==========================
-        # ACCIONES
-        # ==========================
+    if st.button("❌ Rechazar Documento"):
 
-        colA, colB = st.columns(2)
+        doc["Estado"] = "Rechazado"
+        doc["Observaciones"] = observaciones
+        doc["Aprobador"] = aprobador
 
-        with colA:
+        st.session_state.documento_pendiente = None
 
-            if st.button("📤 Aprobar documento"):
-
-                doc["Estado"] = "Aprobado"
-                doc["Observaciones"] = observaciones
-
-                st.session_state.documentos.append(doc)
-
-                st.session_state.documento_pendiente = None
-
-                st.success("✅ Documento aprobado y publicado en el repositorio.")
-
-        with colB:
-
-            if st.button("❌ Rechazar Documento"):
-
-                doc["Estado"] = "Rechazado"
-                doc["Observaciones"] = observaciones
-
-                st.session_state.documento_pendiente = None
-
-                st.error("❌ Documento rechazado.")
+        st.error(
+            "❌ Documento rechazado."
+        )
+        
 # =====================================================
 # CONSULTA DOCUMENTAL
 # =====================================================
