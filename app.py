@@ -386,18 +386,6 @@ if menu == "✅ Aprobaciones":
         st.divider()
 
         # ==========================
-        # OBSERVACIONES
-        # ==========================
-
-        st.subheader("📝 Observaciones del Revisor")
-
-        observaciones = st.text_area(
-            "Escribe observaciones sobre el documento"
-        )
-
-        st.divider()
-
-        # ==========================
         # ACCIONES
         # ==========================
 
