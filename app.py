@@ -298,14 +298,7 @@ if menu == "🔄 Control de Versiones":
         st.write(
             f"**Estado:** {documento['Estado']}"
         )
-
-        st.text_area(
-            "Contenido",
-            documento["Contenido"],
-            height=250,
-            disabled=True
-        )
-
+        
         if st.button("➕ Crear Nueva Versión"):
 
             st.success(
