@@ -142,43 +142,46 @@ if menu == "✅ Aprobaciones":
     else:
 
         # =====================================================
-        # CONVERTIR A DATAFRAME (tipo Azure DevOps grid)
+        # SOLO LISTA (NO DETALLE)
         # =====================================================
         df = pd.DataFrame(pendientes)
 
-        df_mostrar = df[[
-            "Documento",
-            "Tipo",
-            "Version",
-            "Responsable",
-            "Estado",
-            "Fecha"
-        ]]
+        opciones = df["Documento"].tolist()
 
-        st.subheader("📋 Backlog de documentos")
-
-        # =====================================================
-        # SELECCIÓN DE DOCUMENTO
-        # =====================================================
         seleccion = st.selectbox(
-            "Seleccione el documento a gestionar",
-            df_mostrar["Documento"].tolist()
+            "Seleccione un documento para gestionar",
+            ["-- Seleccione --"] + opciones
         )
 
+        # =====================================================
+        # BLOQUE CRÍTICO: NO HACER NADA SI NO HAY SELECCIÓN
+        # =====================================================
+        if seleccion == "-- Seleccione --":
+            st.info("Selecciona un documento para ver su detalle y gestionarlo.")
+            st.stop()
+
+        # =====================================================
+        # TRAER SOLO CUANDO SELECCIONA
+        # =====================================================
         doc = next(
             (d for d in pendientes if d["Documento"] == seleccion),
             None
         )
 
+        if doc is None:
+            st.error("Documento no encontrado")
+            st.stop()
+
         st.divider()
 
         # =====================================================
-        # DETALLE DEL DOCUMENTO
+        # DETALLE SOLO DESPUÉS DE SELECCIÓN
         # =====================================================
+        st.subheader("📄 Detalle del documento seleccionado")
+
         col1, col2 = st.columns(2)
 
         with col1:
-            st.subheader("📄 Detalle")
             st.write(f"**Nombre:** {doc['Documento']}")
             st.write(f"**Tipo:** {doc['Tipo']}")
             st.write(f"**Versión:** {doc['Version']}")
@@ -199,7 +202,7 @@ if menu == "✅ Aprobaciones":
         st.divider()
 
         # =====================================================
-        # ACCIONES (APPROVE / REJECT)
+        # ACCIONES SOLO SI HAY SELECCIÓN
         # =====================================================
         aprobador = st.text_input("Aprobador")
         observaciones = st.text_area("Observaciones")
