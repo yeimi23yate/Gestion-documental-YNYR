@@ -332,12 +332,3 @@ if menu == "📊 Dashboard":
 
     else:
         st.info("No hay datos para mostrar el dashboard aún.")
-
-    # =====================================================
-    # SIMULACIÓN TIPO AZURE DEVOPS FLOW
-    # =====================================================
-    st.subheader("🔄 Flujo tipo pipeline")
-
-    st.progress(
-        aprobados / total if total > 0 else 0
-    )
