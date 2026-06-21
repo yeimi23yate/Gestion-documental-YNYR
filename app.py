@@ -16,14 +16,17 @@ st.set_page_config(
 st.sidebar.title("🗃️ Gestión Documental")
 
 # =====================================================
-# INICIALIZACIÓN
+# VARIABLES DE SESIÓN
 # =====================================================
 
-if "documentos" not in st.session_state:
-    st.session_state.documentos = []
+if "pendientes" not in st.session_state:
+    st.session_state.pendientes = []
 
-if "id_doc" not in st.session_state:
-    st.session_state.id_doc = 1
+if "aprobados" not in st.session_state:
+    st.session_state.aprobados = []
+
+if "rechazados" not in st.session_state:
+    st.session_state.rechazados = []
 
 # =====================================================
 # ENCABEZADO
@@ -43,6 +46,7 @@ menu = st.sidebar.selectbox(
         "📝 Registrar Documento",
         "✅ Aprobaciones",
         "📚 Repositorio",
+        "🔄 Control de Versiones",
         "🔍 Consulta",
         "📊 Dashboard"
     ],
@@ -57,112 +61,152 @@ if menu == "🏠 Home":
 
     st.markdown("""
     # 🚀 Gestión Documental Inteligente
-    Sistema de control con trazabilidad completa del ciclo de vida documental.
+
+    ### Centralice, controle y asegure la trazabilidad de la documentación de sus iniciativas.
+
+    Este sistema permite gestionar el ciclo de vida documental de forma integral: registro, revisión, aprobación, publicación y consulta, garantizando control de versiones, trazabilidad y acceso oportuno a la información.
     """)
 
     st.divider()
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("📄 Documentos", len(st.session_state.documentos))
-    col2.metric("🟡 Pendientes", len([d for d in st.session_state.documentos if d["Estado"] == "Pendiente"]))
-    col3.metric("🟢 Aprobados", len([d for d in st.session_state.documentos if d["Estado"] == "Aprobado"]))
+    st.subheader("🎯 Beneficios")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.success("📈 Centralización documental")
+        st.success("📈 Control de versiones")
+        st.success("📈 Trazabilidad completa")
+
+    with col2:
+        st.success("📈 Flujo de aprobación")
+        st.success("📈 Consulta rápida")
+        st.success("📈 Indicadores de gestión")
 
 # =====================================================
-# REGISTRO
+# REGISTRO DOCUMENTO
 # =====================================================
 
 elif menu == "📝 Registrar Documento":
 
     st.header("📄 Registro de Documento")
 
-    nombre = st.text_input("Nombre")
-    tipo = st.selectbox("Tipo", ["Caso de Prueba", "Manual", "Requerimiento", "Documento Técnico"])
+    nombre = st.text_input("Nombre del documento")
+
+    tipo = st.selectbox(
+        "Tipo",
+        [
+            "Caso de Prueba",
+            "Manual",
+            "Requerimiento",
+            "Documento Técnico"
+        ]
+    )
+
     version = st.text_input("Versión")
     responsable = st.text_input("Responsable")
 
-    archivo = st.file_uploader("Adjuntar documento", type=["pdf", "docx", "xlsx", "txt"])
+    archivo = st.file_uploader(
+        "Adjuntar documento",
+        type=["pdf", "docx", "xlsx", "txt"]
+    )
 
     if st.button("Enviar a revisión"):
 
         if nombre and version and responsable:
 
-            doc = {
-                "id": st.session_state.id_doc,
+            documento = {
                 "Documento": nombre,
                 "Tipo": tipo,
                 "Version": version,
                 "Responsable": responsable,
                 "Estado": "Pendiente",
-                "FechaCreacion": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                "FechaDecision": "",
+                "Fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
                 "NombreArchivo": archivo.name if archivo else "",
                 "Contenido": archivo.read() if archivo else b"",
-                "Observaciones": "",
-                "Historial": []
+                "Observaciones": ""
             }
 
-            doc["Historial"].append(f"Creado {doc['FechaCreacion']}")
-
-            st.session_state.documentos.append(doc)
-            st.session_state.id_doc += 1
+            st.session_state.pendientes.append(documento)
 
             st.success("Documento enviado a revisión")
 
+        else:
+            st.warning("Complete los campos obligatorios")
+
 # =====================================================
-# APROBACIONES (CON HISTORIAL)
+# APROBACIONES
 # =====================================================
 
 elif menu == "✅ Aprobaciones":
 
     st.header("📥 Bandeja de Aprobaciones")
 
-    pendientes = [d for d in st.session_state.documentos if d["Estado"] == "Pendiente"]
-
-    if not pendientes:
+    if len(st.session_state.pendientes) == 0:
         st.info("No existen documentos pendientes")
 
     else:
 
-        nombres = [f"{d['id']} - {d['Documento']}" for d in pendientes]
+        nombres = [doc["Documento"] for doc in st.session_state.pendientes]
 
-        seleccion = st.selectbox("Seleccione documento", nombres)
+        seleccion = st.selectbox(
+            "Seleccione documento",
+            ["-- Seleccione --"] + nombres
+        )
 
-        doc_id = int(seleccion.split(" - ")[0])
-        doc = next(d for d in st.session_state.documentos if d["id"] == doc_id)
+        if seleccion != "-- Seleccione --":
 
-        st.subheader(doc["Documento"])
+            doc = next(
+                d for d in st.session_state.pendientes
+                if d["Documento"] == seleccion
+            )
 
-        st.write(doc)
+            col1, col2 = st.columns(2)
 
-        observaciones = st.text_area("Observaciones")
+            with col1:
+                st.write(f"**Documento:** {doc['Documento']}")
+                st.write(f"**Tipo:** {doc['Tipo']}")
+                st.write(f"**Versión:** {doc['Version']}")
+                st.write(f"**Responsable:** {doc['Responsable']}")
 
-        colA, colB = st.columns(2)
+            with col2:
+                st.write(f"**Estado:** {doc['Estado']}")
+                st.write(f"**Fecha:** {doc['Fecha']}")
 
-        if colA.button("✅ Aprobar"):
+            if doc["NombreArchivo"]:
+                st.download_button(
+                    "📥 Descargar documento",
+                    doc["Contenido"],
+                    file_name=doc["NombreArchivo"]
+                )
 
-            doc["Estado"] = "Aprobado"
-            doc["FechaDecision"] = datetime.now().strftime("%Y-%m-%d %H:%M")
-            doc["Observaciones"] = observaciones
-            doc["Historial"].append(f"Aprobado {doc['FechaDecision']}")
+            observaciones = st.text_area("Observaciones")
 
-            st.success("Aprobado")
-            st.rerun()
+            colA, colB = st.columns(2)
 
-        if colB.button("❌ Rechazar"):
+            with colA:
+                if st.button("✅ Aprobar"):
 
-            doc["Estado"] = "Rechazado"
-            doc["FechaDecision"] = datetime.now().strftime("%Y-%m-%d %H:%M")
-            doc["Observaciones"] = observaciones
-            doc["Historial"].append(f"Rechazado {doc['FechaDecision']}")
+                    doc["Estado"] = "Aprobado"
+                    doc["Observaciones"] = observaciones
 
-            st.error("Rechazado")
-            st.rerun()
+                    st.session_state.aprobados.append(doc)
+                    st.session_state.pendientes.remove(doc)
 
-        st.divider()
-        st.subheader("📜 Historial del documento")
+                    st.success("Documento aprobado")
+                    st.rerun()
 
-        for h in doc["Historial"]:
-            st.write("•", h)
+            with colB:
+                if st.button("❌ Rechazar"):
+
+                    doc["Estado"] = "Rechazado"
+                    doc["Observaciones"] = observaciones
+
+                    st.session_state.rechazados.append(doc)
+                    st.session_state.pendientes.remove(doc)
+
+                    st.error("Documento rechazado")
+                    st.rerun()
 
 # =====================================================
 # REPOSITORIO
@@ -170,75 +214,109 @@ elif menu == "✅ Aprobaciones":
 
 elif menu == "📚 Repositorio":
 
-    st.header("📚 Repositorio")
+    st.header("📚 Repositorio Documental")
 
-    aprobados = [d for d in st.session_state.documentos if d["Estado"] == "Aprobado"]
-
-    if not aprobados:
-        st.info("No hay documentos aprobados")
+    if len(st.session_state.aprobados) == 0:
+        st.info("No existen documentos aprobados")
 
     else:
-        df = pd.DataFrame(aprobados)
+        df = pd.DataFrame(st.session_state.aprobados)
 
-        st.dataframe(df[[
-            "Documento",
-            "Tipo",
-            "Version",
-            "Responsable",
-            "Estado",
-            "FechaCreacion"
-        ]], use_container_width=True)
+        st.dataframe(
+            df[[
+                "Documento",
+                "Tipo",
+                "Version",
+                "Responsable",
+                "Estado",
+                "Fecha"
+            ]],
+            use_container_width=True
+        )
 
 # =====================================================
-# CONSULTA GLOBAL (MEJORADA)
+# CONTROL DE VERSIONES
+# =====================================================
+
+elif menu == "🔄 Control de Versiones":
+
+    st.header("🔄 Control de Versiones")
+
+    if len(st.session_state.aprobados) == 0:
+        st.info("No existen documentos aprobados")
+
+    else:
+        df = pd.DataFrame(st.session_state.aprobados)
+
+        st.dataframe(
+            df[[
+                "Documento",
+                "Version",
+                "Responsable",
+                "Fecha"
+            ]],
+            use_container_width=True
+        )
+
+# =====================================================
+# CONSULTA
 # =====================================================
 
 elif menu == "🔍 Consulta":
 
-    st.header("🔍 Consulta Documental Global")
+    st.header("🔍 Consulta Documental")
 
     criterio = st.text_input("Buscar documento")
 
-    df = pd.DataFrame(st.session_state.documentos)
+    if criterio:
 
-    if not df.empty and criterio:
+        df = pd.DataFrame(st.session_state.aprobados)
 
-        resultado = df[df["Documento"].str.contains(criterio, case=False)]
+        if not df.empty:
 
-        st.dataframe(resultado, use_container_width=True)
+            resultado = df[
+                df["Documento"].str.contains(criterio, case=False, na=False)
+            ]
 
-    elif df.empty:
-        st.info("No hay documentos registrados")
-
-    else:
-        st.dataframe(df, use_container_width=True)
+            st.dataframe(resultado, use_container_width=True)
 
 # =====================================================
-# DASHBOARD REAL
+# DASHBOARD
 # =====================================================
 
-elif menu == "📊 Dashboard":
+if "db" not in st.session_state:
+    st.session_state.db = {
+        "pendientes": [],
+        "aprobados": [],
+        "rechazados": []
+    }
+if menu == "📊 Dashboard":
 
-    st.title("📊 Dashboard Documental")
+    st.title("📊 Indicadores tipo Azure DevOps")
 
-    docs = st.session_state.documentos
+    pendientes = len(st.session_state.db["pendientes"])
+    aprobados = len(st.session_state.db["aprobados"])
+    rechazados = len(st.session_state.db["rechazados"])
 
-    pendientes = len([d for d in docs if d["Estado"] == "Pendiente"])
-    aprobados = len([d for d in docs if d["Estado"] == "Aprobado"])
-    rechazados = len([d for d in docs if d["Estado"] == "Rechazado"])
+    total = pendientes + aprobados + rechazados
 
-    total = len(docs)
-
+    # =====================================================
+    # KPIs PRINCIPALES
+    # =====================================================
     col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric("Total", total)
-    col2.metric("Pendientes", pendientes)
-    col3.metric("Aprobados", aprobados)
-    col4.metric("Rechazados", rechazados)
+    col1.metric("📌 Total documentos", total)
+    col2.metric("🟡 Pendientes", pendientes)
+    col3.metric("🟢 Aprobados", aprobados)
+    col4.metric("🔴 Rechazados", rechazados)
 
     st.divider()
 
+    # =====================================================
+    # PORCENTAJES
+    # =====================================================
     if total > 0:
+        st.subheader("📈 Distribución del flujo")
 
         data = pd.DataFrame({
             "Estado": ["Pendientes", "Aprobados", "Rechazados"],
@@ -247,8 +325,10 @@ elif menu == "📊 Dashboard":
 
         st.bar_chart(data.set_index("Estado"))
 
+        st.subheader("🥧 Distribución porcentual")
+
         data["%"] = data["Cantidad"] / total * 100
         st.dataframe(data, use_container_width=True)
 
     else:
-        st.info("No hay datos para mostrar")
+        st.info("No hay datos para mostrar el dashboard aún.")
