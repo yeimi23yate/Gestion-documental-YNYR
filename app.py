@@ -41,7 +41,7 @@ if os.path.exists("log_CCB.png"):
 menu = st.sidebar.selectbox(
     "Seleccione una opción",
     [
-        "🏠 Inicio",
+        "🏠 Home",
         "📝 Registrar Documento",
         "✅ Aprobaciones",
         "📚 Repositorio",
@@ -55,7 +55,7 @@ menu = st.sidebar.selectbox(
 # INICIO
 # =====================================================
 
-if menu == "🏠 Inicio":
+if menu == "🏠 Home":
 
     st.markdown("""
     # 🚀 Gestión Documental Inteligente
