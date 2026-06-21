@@ -283,38 +283,64 @@ elif menu == "🔍 Consulta":
 # =====================================================
 # DASHBOARD
 # =====================================================
+if menu == "📊 Dashboard":
 
-elif menu == "📊 Dashboard":
+    st.title("📊 Indicadores tipo Azure DevOps")
 
-    st.header("📊 Indicadores de Gestión")
-
-    pendientes = len(st.session_state.pendientes)
-    aprobados = len(st.session_state.aprobados)
-    rechazados = len(st.session_state.rechazados)
+    pendientes = len(st.session_state.db["pendientes"])
+    aprobados = len(st.session_state.db["aprobados"])
+    rechazados = len(st.session_state.db["rechazados"])
 
     total = pendientes + aprobados + rechazados
 
+    # =====================================================
+    # KPIs PRINCIPALES
+    # =====================================================
     col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric("Total", total)
-    col2.metric("Pendientes", pendientes)
-    col3.metric("Aprobados", aprobados)
-    col4.metric("Rechazados", rechazados)
+    col1.metric("📌 Total documentos", total)
+    col2.metric("🟡 Pendientes", pendientes)
+    col3.metric("🟢 Aprobados", aprobados)
+    col4.metric("🔴 Rechazados", rechazados)
 
+    st.divider()
+
+    # =====================================================
+    # GRÁFICO + PORCENTAJES
+    # =====================================================
     if total > 0:
 
-        estados = pd.DataFrame({
+        st.subheader("📈 Distribución del flujo (Azure DevOps style)")
+
+        data = pd.DataFrame({
             "Estado": ["Pendientes", "Aprobados", "Rechazados"],
             "Cantidad": [pendientes, aprobados, rechazados]
         })
 
-        st.subheader("Distribución del flujo")
-        st.bar_chart(estados.set_index("Estado"))
+        data["%"] = (data["Cantidad"] / total * 100).round(2)
 
-        st.metric(
-            "Porcentaje de aprobación",
-            f"{round((aprobados / total) * 100, 2)}%"
+        # =====================================================
+        # COLORES TIPO AZURE DEVOPS
+        # =====================================================
+        color_scale = alt.Scale(
+            domain=["Pendientes", "Aprobados", "Rechazados"],
+            range=["#FFB020", "#2ECC71", "#E74C3C"]
         )
 
+        chart = alt.Chart(data).mark_bar().encode(
+            x=alt.X("Estado:N", title="Estado"),
+            y=alt.Y("Cantidad:Q", title="Cantidad"),
+            color=alt.Color("Estado:N", scale=color_scale),
+            tooltip=["Estado", "Cantidad", "%"]
+        )
+
+        st.altair_chart(chart, use_container_width=True)
+
+        # =====================================================
+        # TABLA DETALLE
+        # =====================================================
+        st.subheader("📊 Distribución porcentual")
+        st.dataframe(data, use_container_width=True)
+
     else:
-        st.info("No existen datos para mostrar")
+        st.info("No hay datos para mostrar el dashboard aún.")
