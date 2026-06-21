@@ -63,12 +63,12 @@ if menu == "🏠 Inicio":
     st.markdown("""
     ### Funcionalidades
 
-     ⭐ Registro documental
-     ⭐ Flujo de aprobación
-     ⭐ Repositorio centralizado
-     ⭐ Consulta documental
-     ⭐ Control de versiones
-     ⭐ Dashboard de indicadores
+    ⭐ Registro documental
+    ⭐ Flujo de aprobación
+    ⭐ Repositorio centralizado
+    ⭐ Consulta documental
+    ⭐ Control de versiones
+    ⭐ Dashboard de indicadores
     """)
 
 # =====================================================
