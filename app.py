@@ -9,9 +9,11 @@ import os
 
 st.set_page_config(
     page_title="Gestión Documental",
-    page_icon="📁",
+    page_icon="📈",
     layout="wide"
 )
+st.image("log_CCB.png", width=150)
+st.sidebar.title("🗃️ Gestión Documental")
 
 # =====================================================
 # VARIABLES DE SESIÓN
