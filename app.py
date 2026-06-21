@@ -55,29 +55,38 @@ menu = st.sidebar.selectbox(
 # INICIO
 # =====================================================
 
-if menu == "🏠 Home":
+st.markdown("""
+# 🚀 Gestión Documental Inteligente
 
-    st.markdown("""
-    # 🚀 Gestión Documental Inteligente
+Centralice la documentación de sus iniciativas en una única plataforma,
+garantizando trazabilidad, control de versiones, aprobaciones formales y
+consulta eficiente de la información.
 
-    Esta solución permite gestionar el ciclo de vida documental de forma integral, desde el registro y revisión hasta la aprobación, publicación y consulta, garantizando control de versiones, trazabilidad y acceso oportuno a la información para la toma de decisiones.
-    """)
+""")
 
-    st.markdown("""
-    ### Funcionalidades
+col1, col2, col3, col4 = st.columns(4)
 
-    ☑️ Registro documental
+col1.metric("📄 Documentos", "125")
+col2.metric("🔄 Versiones", "320")
+col3.metric("✅ Aprobados", "98%")
+col4.metric("👥 Usuarios", "45")
 
-    ☑️ Flujo de aprobación
+st.divider()
 
-    ☑️ Repositorio centralizado
+st.subheader("🎯 Beneficios")
 
-    ☑️ Consulta documental
+col1, col2 = st.columns(2)
 
-    ☑️ Control de versiones
+with col1:
+    st.success("Centralización documental")
+    st.success("Control de versiones")
+    st.success("Trazabilidad completa")
 
-    ☑️ Dashboard de indicadores
-    """)
+with col2:
+    st.success("Flujo de aprobación")
+    st.success("Consulta rápida")
+    st.success("Indicadores de gestión")
+    
 # =====================================================
 # REGISTRO
 # =====================================================
