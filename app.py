@@ -31,12 +31,9 @@ if "rechazados" not in st.session_state:
 # ENCABEZADO
 # =====================================================
 
-st.title("📁 Gestión Documental de Iniciativas IT")
-
-# Si tienes el logo en el repositorio
 if os.path.exists("log_CCB.png"):
     st.image("log_CCB.png", width=180)
-
+st.title("📁 Gestión Documental de Iniciativas IT")
 # =====================================================
 # MENÚ
 # =====================================================
