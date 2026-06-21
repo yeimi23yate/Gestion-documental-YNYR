@@ -58,9 +58,9 @@ menu = st.sidebar.selectbox(
 st.markdown("""
 # 🚀 Gestión Documental Inteligente
 
-Centralice la documentación de sus iniciativas en una única plataforma,
-garantizando trazabilidad, control de versiones, aprobaciones formales y
-consulta eficiente de la información.
+## Centralice, controle y asegure la trazabilidad de la documentación de sus iniciativas.
+
+### Centralice la documentación de sus iniciativas en una única plataforma, garantizando trazabilidad, control de versiones, aprobaciones formales y consulta eficiente de la información.
 
 """)
 
