@@ -33,7 +33,7 @@ if "rechazados" not in st.session_state:
 
 if os.path.exists("log_CCB.png"):
     st.image("log_CCB.png", width=180)
-st.title("📁 Gestión Documental de Iniciativas IT")
+
 # =====================================================
 # MENÚ
 # =====================================================
