@@ -1,8 +1,10 @@
-mport streamlit as st
+import streamlit as st
 import pandas as pd
+from datetime import datetime
+import os
 
 # =====================================================
-# CONFIGURACIÓN DE PÁGINA
+# CONFIGURACIÓN
 # =====================================================
 
 st.set_page_config(
@@ -10,26 +12,33 @@ st.set_page_config(
     page_icon="📁",
     layout="wide"
 )
+
 # =====================================================
 # VARIABLES DE SESIÓN
 # =====================================================
 
-if "documentos" not in st.session_state:
-    st.session_state.documentos = []
+if "pendientes" not in st.session_state:
+    st.session_state.pendientes = []
 
-if "documento_pendiente" not in st.session_state:
-    st.session_state.documento_pendiente = None
+if "aprobados" not in st.session_state:
+    st.session_state.aprobados = []
+
+if "rechazados" not in st.session_state:
+    st.session_state.rechazados = []
+
 # =====================================================
 # ENCABEZADO
 # =====================================================
 
-st.image("log_CCB.png", width=180)
+st.title("📁 Gestión Documental de Iniciativas IT")
+
+# Si tienes el logo en el repositorio
+if os.path.exists("log_CCB.png"):
+    st.image("log_CCB.png", width=180)
 
 # =====================================================
-# MENÚ LATERAL
+# MENÚ
 # =====================================================
-
-st.sidebar.title("🗃️ Gestión Documental")
 
 menu = st.sidebar.selectbox(
     "Seleccione una opción",
@@ -37,7 +46,7 @@ menu = st.sidebar.selectbox(
         "🏠 Inicio",
         "📝 Registrar Documento",
         "✅ Aprobaciones",
-        "📚 Repositorio Documental",
+        "📚 Repositorio",
         "🔄 Control de Versiones",
         "🔍 Consulta",
         "📊 Dashboard"
@@ -50,50 +59,48 @@ menu = st.sidebar.selectbox(
 
 if menu == "🏠 Inicio":
 
-    st.title("📁 Gestión Documental de Iniciativas IT")
+    st.header("Modelo de Gestión Documental")
 
     st.markdown("""
-    ### Modelo de Gestión Documental Centralizada basado en Azure DevOps
+    ### Funcionalidades
 
-    Este prototipo permite centralizar la documentación de las iniciativas IT,
-    garantizando trazabilidad, control de versiones, aprobaciones y consulta
-    oportuna de la información.
+    - Registro documental
+    - Flujo de aprobación
+    - Repositorio centralizado
+    - Consulta documental
+    - Control de versiones
+    - Dashboard de indicadores
     """)
 
-    st.divider()
+    col1, col2, col3 = st.columns(3)
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1.metric(
+        "Pendientes",
+        len(st.session_state.pendientes)
+    )
 
-    col1.metric("Documentos", "125")
-    col2.metric("Versiones", "320")
-    col3.metric("Aprobaciones", "98%")
-    col4.metric("Usuarios", "45")
+    col2.metric(
+        "Aprobados",
+        len(st.session_state.aprobados)
+    )
 
-    st.divider()
+    col3.metric(
+        "Rechazados",
+        len(st.session_state.rechazados)
+    )
 
-    st.subheader("Beneficios de la Solución")
+# =====================================================
+# REGISTRO
+# =====================================================
 
-    st.write("""
-    ✅ Centralización documental
-
-    ✅ Control de versiones
-
-    ✅ Gestión de aprobaciones
-
-    ✅ Trazabilidad de cambios
-
-    ✅ Consulta rápida de información
-
-    ✅ Indicadores para la toma de decisiones
-    """)
 if menu == "📝 Registrar Documento":
 
-    st.title("📝 Registro de Documento")
+    st.header("Registro de Documento")
 
-    nombre = st.text_input("Nombre del documento")
+    nombre = st.text_input("Nombre")
 
     tipo = st.selectbox(
-        "Tipo de documento",
+        "Tipo",
         [
             "Caso de Prueba",
             "Manual",
@@ -107,269 +114,213 @@ if menu == "📝 Registrar Documento":
     responsable = st.text_input("Responsable")
 
     archivo = st.file_uploader(
-        "📎 Adjuntar documento",
+        "Adjuntar documento",
         type=["pdf", "docx", "xlsx", "txt"]
     )
 
-    st.divider()
+    if st.button("Enviar a revisión"):
 
-    if st.button("📤 Enviar a revisión"):
-
-        if nombre and version and responsable and archivo is not None:
+        if nombre and version and responsable:
 
             documento = {
                 "Documento": nombre,
                 "Tipo": tipo,
-                "Versión": version,
+                "Version": version,
                 "Responsable": responsable,
-                "Estado": "Registrado",
-                "Contenido": archivo.read(),
-                "NombreArchivo": archivo.name
+                "Estado": "Pendiente",
+                "Fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                "NombreArchivo": archivo.name if archivo else "",
+                "Contenido": archivo.read() if archivo else b"",
+                "Observaciones": ""
             }
 
-            st.session_state.documento_pendiente = documento
+            st.session_state.pendientes.append(documento)
 
-            st.success("Documento enviado correctamente al flujo de aprobación.")
+            st.success("Documento enviado a revisión")
 
         else:
-            st.warning("Completa todos los campos y adjunta un archivo.")
+            st.warning("Complete los campos obligatorios")
+
 # =====================================================
-# REPOSITORIO DOCUMENTAL
+# APROBACIONES
 # =====================================================
 
-if menu == "📚 Repositorio Documental":
+if menu == "✅ Aprobaciones":
 
-    st.title("📚 Repositorio Documental")
+    st.header("Bandeja de Aprobaciones")
 
-    if len(st.session_state.documentos) == 0:
+    if len(st.session_state.pendientes) == 0:
 
-        st.info(
-            "No existen documentos aprobados."
-        )
+        st.info("No existen documentos pendientes")
 
     else:
 
-        documentos = pd.DataFrame(
-            st.session_state.documentos
+        nombres = [
+            doc["Documento"]
+            for doc in st.session_state.pendientes
+        ]
+
+        seleccion = st.selectbox(
+            "Seleccione documento",
+            ["-- Seleccione --"] + nombres
         )
 
+        if seleccion != "-- Seleccione --":
+
+            doc = next(
+                d
+                for d in st.session_state.pendientes
+                if d["Documento"] == seleccion
+            )
+
+            st.subheader("Información")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+
+                st.write(f"**Documento:** {doc['Documento']}")
+                st.write(f"**Tipo:** {doc['Tipo']}")
+                st.write(f"**Versión:** {doc['Version']}")
+                st.write(f"**Responsable:** {doc['Responsable']}")
+
+            with col2:
+
+                st.write(f"**Estado:** {doc['Estado']}")
+                st.write(f"**Fecha:** {doc['Fecha']}")
+
+            if doc["NombreArchivo"]:
+
+                st.download_button(
+                    "Descargar documento",
+                    doc["Contenido"],
+                    file_name=doc["NombreArchivo"]
+                )
+
+            observaciones = st.text_area(
+                "Observaciones"
+            )
+
+            colA, colB = st.columns(2)
+
+            with colA:
+
+                if st.button("✅ Aprobar"):
+
+                    doc["Estado"] = "Aprobado"
+                    doc["Observaciones"] = observaciones
+
+                    st.session_state.aprobados.append(doc)
+                    st.session_state.pendientes.remove(doc)
+
+                    st.success("Documento aprobado")
+                    st.rerun()
+
+            with colB:
+
+                if st.button("❌ Rechazar"):
+
+                    doc["Estado"] = "Rechazado"
+                    doc["Observaciones"] = observaciones
+
+                    st.session_state.rechazados.append(doc)
+                    st.session_state.pendientes.remove(doc)
+
+                    st.error("Documento rechazado")
+                    st.rerun()
+
+# =====================================================
+# REPOSITORIO
+# =====================================================
+
+if menu == "📚 Repositorio":
+
+    st.header("Repositorio Documental")
+
+    if len(st.session_state.aprobados) == 0:
+
+        st.info("No existen documentos aprobados")
+
+    else:
+
+        df = pd.DataFrame(st.session_state.aprobados)
+
+        columnas = [
+            "Documento",
+            "Tipo",
+            "Version",
+            "Responsable",
+            "Estado",
+            "Fecha"
+        ]
+
         st.dataframe(
-            documentos,
+            df[columnas],
             use_container_width=True
         )
 
 # =====================================================
-# CONTROL DE VERSIONES
+# CONTROL VERSIONES
 # =====================================================
 
 if menu == "🔄 Control de Versiones":
 
-    st.title("🔄 Control de Versiones")
+    st.header("Control de Versiones")
 
-    if len(st.session_state.documentos) == 0:
+    if len(st.session_state.aprobados) == 0:
 
-        st.info(
-            "No existen documentos aprobados para consultar versiones."
-        )
+        st.info("No existen documentos aprobados")
 
     else:
 
-        documento_seleccionado = st.selectbox(
-            "Seleccione un documento",
-            [
-                doc["Documento"]
-                for doc in st.session_state.documentos
-            ]
+        df = pd.DataFrame(
+            st.session_state.aprobados
         )
-
-        documento = next(
-            doc
-            for doc in st.session_state.documentos
-            if doc["Documento"] == documento_seleccionado
-        )
-
-        historial = pd.DataFrame({
-            "Documento": [documento["Documento"]],
-            "Versión": [documento["Versión"]],
-            "Responsable": [documento["Responsable"]],
-            "Estado": [documento["Estado"]]
-        })
 
         st.dataframe(
-            historial,
+            df[
+                [
+                    "Documento",
+                    "Version",
+                    "Responsable",
+                    "Fecha"
+                ]
+            ],
             use_container_width=True
         )
 
-        st.subheader("📄 Información de la versión")
-
-        st.write(
-            f"**Documento:** {documento['Documento']}"
-        )
-
-        st.write(
-            f"**Versión actual:** {documento['Versión']}"
-        )
-
-        st.write(
-            f"**Responsable:** {documento['Responsable']}"
-        )
-
-        st.write(
-            f"**Estado:** {documento['Estado']}"
-        )
-
-        st.text_area(
-            "Contenido",
-            documento["Contenido"],
-            height=250,
-            disabled=True
-        )
-
-        if st.button("➕ Crear Nueva Versión"):
-
-            st.success(
-                f"Se ha generado una nueva versión basada en la versión {documento['Versión']}."
-            )
-
-if menu == "✅ Aprobaciones":
-
-    import base64
-
-    st.title("🔄 Workflow de Gestión Documental")
-
-    if st.session_state.documento_pendiente is None:
-
-        st.warning("No existen documentos pendientes por aprobar.")
-
-    else:
-
-        doc = st.session_state.documento_pendiente
-
-        # ==========================
-        # FLUJO
-        # ==========================
-        st.info("📝 Registrado → 👀 En revisión → ✅ Aprobado → 📚 Publicado")
-        st.progress(50)
-
-        st.divider()
-
-        col1, col2 = st.columns([1, 2])
-
-        # ==========================
-        # INFORMACIÓN
-        # ==========================
-        with col1:
-
-            st.subheader("📋 Información del Documento")
-
-            st.write(f"**Documento:** {doc['Documento']}")
-            st.write(f"**Versión:** {doc['Versión']}")
-            st.write(f"**Responsable:** {doc['Responsable']}")
-            st.write(f"**Estado:** {doc['Estado']}")
-
-            if "Observaciones" in doc:
-                st.write("**Observaciones anteriores:**")
-                st.info(doc["Observaciones"])
-
-        # ==========================
-        # DESCARGA (VISTA PREVIA)
-        # ==========================
-        with col2:
-
-            st.subheader("👁️ Vista previa del documento")
-
-            archivo_nombre = doc.get("NombreArchivo", "documento")
-
-            st.info("📄 Vista previa mediante descarga del archivo")
-
-            st.download_button(
-                label="📥 Descargar documento",
-                data=doc["Contenido"],
-                file_name=archivo_nombre,
-                mime="application/octet-stream"
-            )
-
-        st.divider()
-
-        # ==========================
-        # OBSERVACIONES
-        # ==========================
-
-        st.subheader("📝 Observaciones del Revisor")
-
-        observaciones = st.text_area(
-            "Escribe observaciones sobre el documento"
-        )
-
-        st.divider()
-
-        # ==========================
-        # OBSERVACIONES
-        # ==========================
-
-        st.subheader("📝 Observaciones del Revisor")
-
-        observaciones = st.text_area(
-            "Escribe observaciones sobre el documento"
-        )
-
-        st.divider()
-
-        # ==========================
-        # ACCIONES
-        # ==========================
-
-        colA, colB = st.columns(2)
-
-        with colA:
-
-            if st.button("📤 Aprobar documento"):
-
-                doc["Estado"] = "Aprobado"
-                doc["Observaciones"] = observaciones
-
-                st.session_state.documentos.append(doc)
-
-                st.session_state.documento_pendiente = None
-
-                st.success("✅ Documento aprobado y publicado en el repositorio.")
-
-        with colB:
-
-            if st.button("❌ Rechazar Documento"):
-
-                doc["Estado"] = "Rechazado"
-                doc["Observaciones"] = observaciones
-
-                st.session_state.documento_pendiente = None
-
-                st.error("❌ Documento rechazado.")
 # =====================================================
-# CONSULTA DOCUMENTAL
+# CONSULTA
 # =====================================================
 
 if menu == "🔍 Consulta":
 
-    st.title("🔍 Consulta Documental")
+    st.header("Consulta Documental")
 
-    buscar = st.text_input(
-        "Buscar Documento"
+    criterio = st.text_input(
+        "Buscar documento"
     )
 
-    if buscar:
+    if criterio:
 
-        resultado = pd.DataFrame({
-            "Documento": ["CP Login"],
-            "Versión": ["1.3"],
-            "Estado": ["Aprobado"],
-            "Responsable": ["Analista QA"],
-            "Fecha": ["10/06/2026"]
-        })
-
-        st.dataframe(
-            resultado,
-            use_container_width=True
+        df = pd.DataFrame(
+            st.session_state.aprobados
         )
+
+        if not df.empty:
+
+            resultado = df[
+                df["Documento"].str.contains(
+                    criterio,
+                    case=False,
+                    na=False
+                )
+            ]
+
+            st.dataframe(
+                resultado,
+                use_container_width=True
+            )
 
 # =====================================================
 # DASHBOARD
@@ -377,74 +328,51 @@ if menu == "🔍 Consulta":
 
 if menu == "📊 Dashboard":
 
-    st.title("📊 Indicadores de Gestión Documental")
+    st.header("Indicadores de Gestión")
 
-    col1, col2, col3 = st.columns(3)
+    pendientes = len(st.session_state.pendientes)
+    aprobados = len(st.session_state.aprobados)
+    rechazados = len(st.session_state.rechazados)
 
-    col1.metric(
-        "Documentos Centralizados",
-        "125",
-        "+20%"
-    )
+    total = pendientes + aprobados + rechazados
 
-    col2.metric(
-        "Tiempo de Consulta",
-        "2 min",
-        "-80%"
-    )
+    col1, col2, col3, col4 = st.columns(4)
 
-    col3.metric(
-        "Documentos Actualizados",
-        "95%",
-        "+15%"
-    )
+    col1.metric("Total", total)
+    col2.metric("Pendientes", pendientes)
+    col3.metric("Aprobados", aprobados)
+    col4.metric("Rechazados", rechazados)
 
-    st.divider()
+    if total > 0:
 
-    st.subheader(
-        "Crecimiento del Repositorio Documental"
-    )
+        estados = pd.DataFrame({
+            "Estado": [
+                "Pendientes",
+                "Aprobados",
+                "Rechazados"
+            ],
+            "Cantidad": [
+                pendientes,
+                aprobados,
+                rechazados
+            ]
+        })
 
-    datos = pd.DataFrame({
-        "Mes": [
-            "Ene",
-            "Feb",
-            "Mar",
-            "Abr",
-            "May",
-            "Jun"
-        ],
-        "Documentos": [
-            20,
-            35,
-            50,
-            80,
-            110,
-            125
-        ]
-    })
+        st.subheader("Distribución del Flujo")
 
-    st.line_chart(
-        datos.set_index("Mes")
-    )
+        st.bar_chart(
+            estados.set_index("Estado")
+        )
 
-    st.subheader(
-        "Estado de los Documentos"
-    )
+        porcentaje_aprobacion = round(
+            (aprobados / total) * 100,
+            2
+        )
 
-    estados = pd.DataFrame({
-        "Estado": [
-            "Aprobados",
-            "En revisión",
-            "Pendientes"
-        ],
-        "Cantidad": [
-            95,
-            20,
-            10
-        ]
-    })
+        st.metric(
+            "Porcentaje de aprobación",
+            f"{porcentaje_aprobacion}%"
+        )
 
-    st.bar_chart(
-        estados.set_index("Estado")
-    )
+    else:
+        st.info("No existen datos para mostrar")
