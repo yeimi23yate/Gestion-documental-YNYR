@@ -58,6 +58,9 @@ menu = st.sidebar.selectbox(
 if menu == "🏠 Inicio":
 
     st.markdown("""
+    ## Esta solución permite gestionar el ciclo de vida documental de forma integral, desde el registro y revisión hasta la aprobación, publicación y consulta, garantizando control de versiones, trazabilidad y acceso oportuno a la información para la toma de decisiones.
+    
+    st.markdown("""
     ### Funcionalidades
 
      ⭐ Registro documental
@@ -67,23 +70,6 @@ if menu == "🏠 Inicio":
      ⭐ Control de versiones
      ⭐ Dashboard de indicadores
     """)
-
-    col1, col2, col3 = st.columns(3)
-
-    col1.metric(
-        "Pendientes",
-        len(st.session_state.pendientes)
-    )
-
-    col2.metric(
-        "Aprobados",
-        len(st.session_state.aprobados)
-    )
-
-    col3.metric(
-        "Rechazados",
-        len(st.session_state.rechazados)
-    )
 
 # =====================================================
 # REGISTRO
