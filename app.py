@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import os
-import altair as alt  # ✅ IMPORT NECESARIO
+import altair as alt
 
 # =====================================================
 # CONFIGURACIÓN
