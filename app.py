@@ -57,17 +57,15 @@ menu = st.sidebar.selectbox(
 
 if menu == "🏠 Inicio":
 
-    st.header("Modelo de Gestión Documental")
-
     st.markdown("""
     ### Funcionalidades
 
-    - Registro documental
-    - Flujo de aprobación
-    - Repositorio centralizado
-    - Consulta documental
-    - Control de versiones
-    - Dashboard de indicadores
+     ⭐ Registro documental
+     ⭐ Flujo de aprobación
+     ⭐ Repositorio centralizado
+     ⭐ Consulta documental
+     ⭐ Control de versiones
+     ⭐ Dashboard de indicadores
     """)
 
     col1, col2, col3 = st.columns(3)
