@@ -64,13 +64,6 @@ consulta eficiente de la información.
 
 """)
 
-col1, col2, col3, col4 = st.columns(4)
-
-col1.metric("📄 Documentos", "125")
-col2.metric("🔄 Versiones", "320")
-col3.metric("✅ Aprobados", "98%")
-col4.metric("👥 Usuarios", "45")
-
 st.divider()
 
 st.subheader("🎯 Beneficios")
