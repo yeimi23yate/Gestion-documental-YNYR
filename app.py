@@ -283,6 +283,7 @@ elif menu == "🔍 Consulta":
 # =====================================================
 # DASHBOARD
 # =====================================================
+
 if menu == "📊 Dashboard":
 
     st.title("📊 Indicadores tipo Azure DevOps")
@@ -306,41 +307,31 @@ if menu == "📊 Dashboard":
     st.divider()
 
     # =====================================================
-    # GRÁFICO + PORCENTAJES
+    # PORCENTAJES
     # =====================================================
     if total > 0:
-
-        st.subheader("📈 Distribución del flujo (Azure DevOps style)")
+        st.subheader("📈 Distribución del flujo")
 
         data = pd.DataFrame({
             "Estado": ["Pendientes", "Aprobados", "Rechazados"],
             "Cantidad": [pendientes, aprobados, rechazados]
         })
 
-        data["%"] = (data["Cantidad"] / total * 100).round(2)
+        st.bar_chart(data.set_index("Estado"))
 
-        # =====================================================
-        # COLORES TIPO AZURE DEVOPS
-        # =====================================================
-        color_scale = alt.Scale(
-            domain=["Pendientes", "Aprobados", "Rechazados"],
-            range=["#FFB020", "#2ECC71", "#E74C3C"]
-        )
+        st.subheader("🥧 Distribución porcentual")
 
-        chart = alt.Chart(data).mark_bar().encode(
-            x=alt.X("Estado:N", title="Estado"),
-            y=alt.Y("Cantidad:Q", title="Cantidad"),
-            color=alt.Color("Estado:N", scale=color_scale),
-            tooltip=["Estado", "Cantidad", "%"]
-        )
-
-        st.altair_chart(chart, use_container_width=True)
-
-        # =====================================================
-        # TABLA DETALLE
-        # =====================================================
-        st.subheader("📊 Distribución porcentual")
+        data["%"] = data["Cantidad"] / total * 100
         st.dataframe(data, use_container_width=True)
 
     else:
         st.info("No hay datos para mostrar el dashboard aún.")
+
+    # =====================================================
+    # SIMULACIÓN TIPO AZURE DEVOPS FLOW
+    # =====================================================
+    st.subheader("🔄 Flujo tipo pipeline")
+
+    st.progress(
+        aprobados / total if total > 0 else 0
+    )
