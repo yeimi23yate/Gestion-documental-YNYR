@@ -284,6 +284,12 @@ elif menu == "🔍 Consulta":
 # DASHBOARD
 # =====================================================
 
+if "db" not in st.session_state:
+    st.session_state.db = {
+        "pendientes": [],
+        "aprobados": [],
+        "rechazados": []
+    }
 if menu == "📊 Dashboard":
 
     st.title("📊 Indicadores tipo Azure DevOps")
