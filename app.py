@@ -60,7 +60,7 @@ st.markdown("""
 
 ### Centralice, controle y asegure la trazabilidad de la documentación de sus iniciativas.
 
-Centralice la documentación de sus iniciativas en una única plataforma, garantizando trazabilidad, control de versiones, aprobaciones formales y consulta eficiente de la información.
+Implemente un flujo estructurado de registro, revisión, aprobación y publicación que garantice la calidad documental, el control de cambios y la disponibilidad de información actualizada para todos los interesados.
 
 """)
 
