@@ -71,14 +71,14 @@ st.subheader("🎯 Beneficios")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.success("Centralización documental")
-    st.success("Control de versiones")
-    st.success("Trazabilidad completa")
+    st.success("📈 Centralización documental")
+    st.success("📈 Control de versiones")
+    st.success("📈Trazabilidad completa")
 
 with col2:
-    st.success("Flujo de aprobación")
-    st.success("Consulta rápida")
-    st.success("Indicadores de gestión")
+    st.success("📈 Flujo de aprobación")
+    st.success("📈 Consulta rápida")
+    st.success("📈 Indicadores de gestión")
     
 # =====================================================
 # REGISTRO
