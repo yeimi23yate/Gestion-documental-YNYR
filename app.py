@@ -58,19 +58,26 @@ menu = st.sidebar.selectbox(
 if menu == "🏠 Inicio":
 
     st.markdown("""
-    ## Esta solución permite gestionar el ciclo de vida documental de forma integral, desde el registro y revisión hasta la aprobación, publicación y consulta, garantizando control de versiones, trazabilidad y acceso oportuno a la información para la toma de decisiones.
-    
+    ## 🚀 Gestión Documental Inteligente
+
+    Esta solución permite gestionar el ciclo de vida documental de forma integral, desde el registro y revisión hasta la aprobación, publicación y consulta, garantizando control de versiones, trazabilidad y acceso oportuno a la información para la toma de decisiones.
+    """)
+
     st.markdown("""
     ### Funcionalidades
 
-     Registro documental
-    ✅ Flujo de aprobación
-    ✅ Repositorio centralizado
-    ✅ Consulta documental
-    ✅ Control de versiones
-    ✅ Dashboard de indicadores
-    """)
+    ☑️ Registro documental
 
+    ☑️ Flujo de aprobación
+
+    ☑️ Repositorio centralizado
+
+    ☑️ Consulta documental
+
+    ☑️ Control de versiones
+
+    ☑️ Dashboard de indicadores
+    """)
 # =====================================================
 # REGISTRO
 # =====================================================
