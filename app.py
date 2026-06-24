@@ -489,7 +489,7 @@ st.divider()
         # DETALLE DE VERSIONES
         # ==========================================
 
-        st.subheader("📚 Historial de Versiones")
+st.subheader("📚 Historial de Versiones")
 
         for doc in documentos:
 
