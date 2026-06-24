@@ -470,7 +470,7 @@ st.success(
 
 df = pd.DataFrame(documentos)
 
-        st.dataframe(
+st.dataframe(
             df[
                 [
                     "Documento",
@@ -483,7 +483,7 @@ df = pd.DataFrame(documentos)
             use_container_width=True
         )
 
-        st.divider()
+st.divider()
 
         # ==========================================
         # DETALLE DE VERSIONES
