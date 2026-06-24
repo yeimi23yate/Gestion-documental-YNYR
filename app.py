@@ -444,7 +444,7 @@ if buscar:
                 in doc["Documento"].lower()
             ]
 
-        if responsable_filtro != "Todos":
+    if responsable_filtro != "Todos":
 
             documentos = [
                 doc for doc in documentos
