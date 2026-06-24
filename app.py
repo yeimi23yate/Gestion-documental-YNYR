@@ -452,7 +452,7 @@ if responsable_filtro != "Todos":
                 == responsable_filtro
             ]
 
-        if documento_filtro != "Todos":
+if documento_filtro != "Todos":
 
             documentos = [
                 doc for doc in documentos
