@@ -436,8 +436,7 @@ elif menu == "🔄 Control de Versiones":
         # ==========================================
         # APLICAR FILTROS
         # ==========================================
-
-        if buscar:
+if buscar:
 
             documentos = [
                 doc for doc in documentos
