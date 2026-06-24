@@ -388,21 +388,147 @@ elif menu == "🔄 Control de Versiones":
     st.header("🔄 Control de Versiones")
 
     if len(st.session_state.aprobados) == 0:
-        st.info("No existen documentos aprobados")
+
+        st.info("No existen documentos aprobados.")
 
     else:
-        df = pd.DataFrame(st.session_state.aprobados)
+
+        documentos = st.session_state.aprobados.copy()
+
+        # ==========================================
+        # FILTROS
+        # ==========================================
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+
+            buscar = st.text_input(
+                "🔍 Buscar documento"
+            )
+
+        with col2:
+
+            responsables = sorted(
+                list(
+                    set(
+                        doc["Responsable"]
+                        for doc in documentos
+                    )
+                )
+            )
+
+            responsable_filtro = st.selectbox(
+                "👤 Responsable",
+                ["Todos"] + responsables
+            )
+
+        with col3:
+
+            nombres = sorted(
+                list(
+                    set(
+                        doc["Documento"]
+                        for doc in documentos
+                    )
+                )
+            )
+
+            documento_filtro = st.selectbox(
+                "📄 Documento",
+                ["Todos"] + nombres
+            )
+
+        # ==========================================
+        # APLICAR FILTROS
+        # ==========================================
+
+        if buscar:
+
+            documentos = [
+                doc for doc in documentos
+                if buscar.lower()
+                in doc["Documento"].lower()
+            ]
+
+        if responsable_filtro != "Todos":
+
+            documentos = [
+                doc for doc in documentos
+                if doc["Responsable"]
+                == responsable_filtro
+            ]
+
+        if documento_filtro != "Todos":
+
+            documentos = [
+                doc for doc in documentos
+                if doc["Documento"]
+                == documento_filtro
+            ]
+
+        # ==========================================
+        # RESULTADOS
+        # ==========================================
+
+        st.success(
+            f"Versiones encontradas: {len(documentos)}"
+        )
+
+        df = pd.DataFrame(documentos)
 
         st.dataframe(
-            df[[
-                "Documento",
-                "Version",
-                "Responsable",
-                "Fecha"
-            ]],
+            df[
+                [
+                    "Documento",
+                    "Version",
+                    "Responsable",
+                    "Estado",
+                    "Fecha"
+                ]
+            ],
             use_container_width=True
         )
 
+        st.divider()
+
+        # ==========================================
+        # DETALLE DE VERSIONES
+        # ==========================================
+
+        st.subheader("📚 Historial de Versiones")
+
+        for doc in documentos:
+
+            with st.expander(
+                f"{doc['Documento']} - Versión {doc['Version']}"
+            ):
+
+                st.write(
+                    f"**Documento:** {doc['Documento']}"
+                )
+
+                st.write(
+                    f"**Versión:** {doc['Version']}"
+                )
+
+                st.write(
+                    f"**Responsable:** {doc['Responsable']}"
+                )
+
+                st.write(
+                    f"**Fecha:** {doc['Fecha']}"
+                )
+
+                st.write(
+                    f"**Estado:** {doc['Estado']}"
+                )
+
+                if doc.get("Observaciones"):
+
+                    st.write(
+                        f"**Observaciones:** {doc['Observaciones']}"
+                    )
 # =====================================================
 # CONSULTA
 # =====================================================
