@@ -399,15 +399,9 @@ elif menu == "🔄 Control de Versiones":
         # FILTROS
         # ==========================================
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
 
         with col1:
-
-            buscar = st.text_input(
-                "🔍 Buscar documento"
-            )
-
-        with col2:
 
             responsables = sorted(
                 list(
@@ -423,7 +417,7 @@ elif menu == "🔄 Control de Versiones":
                 ["Todos"] + responsables
             )
 
-        with col3:
+        with col2:
 
             nombres = sorted(
                 list(
