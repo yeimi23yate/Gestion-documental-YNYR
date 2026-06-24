@@ -212,9 +212,6 @@ elif menu == "✅ Aprobaciones":
 # REPOSITORIO DOCUMENTAL
 # =====================================================
 
-    if doc["Estado"] == "Publicado":
-        st.success("✅ Documento Oficial")
-
 elif menu == "📚 Repositorio":
 
     st.header("📚 Repositorio Documental")
@@ -380,7 +377,8 @@ elif menu == "📚 Repositorio":
             ],
             use_container_width=True
         )
-
+if doc["Estado"] == "Publicado":
+    st.success("✅ Documento Oficial")
 # =====================================================
 # CONTROL DE VERSIONES
 # =====================================================
