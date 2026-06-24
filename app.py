@@ -209,7 +209,7 @@ elif menu == "✅ Aprobaciones":
                     st.rerun()
 
 # =====================================================
-# REPOSITORIO
+# REPOSITORIO DOCUMENTAL
 # =====================================================
 
 elif menu == "📚 Repositorio":
@@ -217,20 +217,164 @@ elif menu == "📚 Repositorio":
     st.header("📚 Repositorio Documental")
 
     if len(st.session_state.aprobados) == 0:
-        st.info("No existen documentos aprobados")
+
+        st.info("No existen documentos aprobados en el repositorio.")
 
     else:
-        df = pd.DataFrame(st.session_state.aprobados)
+
+        documentos = st.session_state.aprobados.copy()
+
+        # ==========================================
+        # FILTROS
+        # ==========================================
+
+        st.subheader("🔍 Consulta Documental")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            buscar = st.text_input(
+                "Buscar documento",
+                placeholder="Ej: Manual QA"
+            )
+
+        with col2:
+
+            tipos = list(
+                set(
+                    doc["Tipo"]
+                    for doc in documentos
+                )
+            )
+
+            tipo_filtro = st.selectbox(
+                "Filtrar por tipo",
+                ["Todos"] + sorted(tipos)
+            )
+
+        # ==========================================
+        # APLICAR FILTROS
+        # ==========================================
+
+        if buscar:
+
+            documentos = [
+                doc for doc in documentos
+                if buscar.lower()
+                in doc["Documento"].lower()
+            ]
+
+        if tipo_filtro != "Todos":
+
+            documentos = [
+                doc for doc in documentos
+                if doc["Tipo"] == tipo_filtro
+            ]
+
+        # ==========================================
+        # RESULTADOS
+        # ==========================================
+
+        st.success(
+            f"📄 Documentos encontrados: {len(documentos)}"
+        )
+
+        st.divider()
+
+        # ==========================================
+        # TARJETAS DOCUMENTALES
+        # ==========================================
+
+        if len(documentos) == 0:
+
+            st.warning(
+                "No se encontraron documentos con los filtros seleccionados."
+            )
+
+        else:
+
+            cols = st.columns(3)
+
+            for idx, doc in enumerate(documentos):
+
+                with cols[idx % 3]:
+
+                    st.markdown(
+                        f"""
+                        ### 📄 {doc['Documento']}
+                        """
+                    )
+
+                    st.write(
+                        f"**Tipo:** {doc['Tipo']}"
+                    )
+
+                    st.write(
+                        f"**Versión:** {doc['Version']}"
+                    )
+
+                    st.write(
+                        f"**Responsable:** {doc['Responsable']}"
+                    )
+
+                    st.write(
+                        f"**Estado:** {doc['Estado']}"
+                    )
+
+                    st.write(
+                        f"**Fecha:** {doc['Fecha']}"
+                    )
+
+                    # ==================================
+                    # DESCARGA
+                    # ==================================
+
+                    if doc["Contenido"]:
+
+                        st.download_button(
+                            label="📥 Descargar",
+                            data=doc["Contenido"],
+                            file_name=doc["NombreArchivo"],
+                            mime="application/octet-stream",
+                            key=f"download_{idx}"
+                        )
+
+                    # ==================================
+                    # OBSERVACIONES
+                    # ==================================
+
+                    if doc.get("Observaciones"):
+
+                        with st.expander(
+                            "📝 Observaciones"
+                        ):
+
+                            st.write(
+                                doc["Observaciones"]
+                            )
+
+                    st.divider()
+
+        # ==========================================
+        # TABLA RESUMEN
+        # ==========================================
+
+        st.subheader("📋 Inventario Documental")
+
+        df_repo = pd.DataFrame(documentos)
 
         st.dataframe(
-            df[[
-                "Documento",
-                "Tipo",
-                "Version",
-                "Responsable",
-                "Estado",
-                "Fecha"
-            ]],
+            df_repo[
+                [
+                    "Documento",
+                    "Tipo",
+                    "Version",
+                    "Responsable",
+                    "Estado",
+                    "Fecha"
+                ]
+            ],
             use_container_width=True
         )
 
