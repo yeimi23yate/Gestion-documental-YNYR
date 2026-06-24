@@ -491,7 +491,7 @@ st.divider()
 
 st.subheader("📚 Historial de Versiones")
 
-        for doc in documentos:
+for doc in documentos:
 
             with st.expander(
                 f"{doc['Documento']} - Versión {doc['Version']}"
@@ -517,7 +517,7 @@ st.subheader("📚 Historial de Versiones")
                     f"**Estado:** {doc['Estado']}"
                 )
 
-                if doc.get("Observaciones"):
+if doc.get("Observaciones"):
 
                     st.write(
                         f"**Observaciones:** {doc['Observaciones']}"
