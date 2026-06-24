@@ -284,51 +284,87 @@ elif menu == "🔍 Consulta":
 # DASHBOARD
 # =====================================================
 
-if "db" not in st.session_state:
-    st.session_state.db = {
-        "pendientes": [],
-        "aprobados": [],
-        "rechazados": []
-    }
-if menu == "📊 Dashboard":
+elif menu == "📊 Dashboard":
 
-    st.title("📊 Indicadores tipo Azure DevOps")
+    st.title("📊 Dashboard Ejecutivo")
 
-    pendientes = len(st.session_state.db["pendientes"])
-    aprobados = len(st.session_state.db["aprobados"])
-    rechazados = len(st.session_state.db["rechazados"])
+    pendientes = len(st.session_state.pendientes)
+    aprobados = len(st.session_state.aprobados)
+    rechazados = len(st.session_state.rechazados)
 
     total = pendientes + aprobados + rechazados
 
-    # =====================================================
-    # KPIs PRINCIPALES
-    # =====================================================
+    # KPIs
     col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric("📌 Total documentos", total)
+    col1.metric("📄 Total Documentos", total)
     col2.metric("🟡 Pendientes", pendientes)
     col3.metric("🟢 Aprobados", aprobados)
     col4.metric("🔴 Rechazados", rechazados)
 
     st.divider()
 
-    # =====================================================
-    # PORCENTAJES
-    # =====================================================
     if total > 0:
-        st.subheader("📈 Distribución del flujo")
 
-        data = pd.DataFrame({
-            "Estado": ["Pendientes", "Aprobados", "Rechazados"],
-            "Cantidad": [pendientes, aprobados, rechazados]
-        })
+        # Dataframe consolidado
+        documentos = (
+            st.session_state.pendientes +
+            st.session_state.aprobados +
+            st.session_state.rechazados
+        )
 
-        st.bar_chart(data.set_index("Estado"))
+        df = pd.DataFrame(documentos)
 
-        st.subheader("🥧 Distribución porcentual")
+        # =====================================================
+        # GRÁFICO POR ESTADO
+        # =====================================================
 
-        data["%"] = data["Cantidad"] / total * 100
-        st.dataframe(data, use_container_width=True)
+        st.subheader("📈 Estado Documental")
+
+        estados = df["Estado"].value_counts()
+
+        st.bar_chart(estados)
+
+        # =====================================================
+        # DOCUMENTOS POR TIPO
+        # =====================================================
+
+        st.subheader("📂 Documentos por Tipo")
+
+        tipos = df["Tipo"].value_counts()
+
+        st.bar_chart(tipos)
+
+        # =====================================================
+        # DOCUMENTOS POR RESPONSABLE
+        # =====================================================
+
+        st.subheader("👤 Documentos por Responsable")
+
+        responsables = df["Responsable"].value_counts()
+
+        st.bar_chart(responsables)
+
+        # =====================================================
+        # ÚLTIMOS DOCUMENTOS
+        # =====================================================
+
+        st.subheader("📋 Últimos documentos registrados")
+
+        st.dataframe(
+            df[
+                [
+                    "Documento",
+                    "Tipo",
+                    "Version",
+                    "Responsable",
+                    "Estado",
+                    "Fecha"
+                ]
+            ],
+            use_container_width=True
+        )
 
     else:
-        st.info("No hay datos para mostrar el dashboard aún.")
+
+        st.info("No existen documentos registrados.")
