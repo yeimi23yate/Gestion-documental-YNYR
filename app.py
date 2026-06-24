@@ -378,7 +378,7 @@ elif menu == "📚 Repositorio":
             use_container_width=True
         )
     if doc["Estado"] == "Publicado":
-    st.success("✅ Documento Oficial")
+     st.success("✅ Documento Oficial")
 # =====================================================
 # CONTROL DE VERSIONES
 # =====================================================
