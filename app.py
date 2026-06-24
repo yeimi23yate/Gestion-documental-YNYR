@@ -187,7 +187,7 @@ elif menu == "✅ Aprobaciones":
             with colA:
                 if st.button("✅ Aprobar"):
 
-                    doc["Estado"] = "Aprobado"
+                    doc["Estado"] = "Publicado"
                     doc["Observaciones"] = observaciones
 
                     st.session_state.aprobados.append(doc)
@@ -211,6 +211,9 @@ elif menu == "✅ Aprobaciones":
 # =====================================================
 # REPOSITORIO DOCUMENTAL
 # =====================================================
+
+if doc["Estado"] == "Publicado":
+    st.success("✅ Documento Oficial")
 
 elif menu == "📚 Repositorio":
 
