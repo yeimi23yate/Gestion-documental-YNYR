@@ -468,7 +468,7 @@ st.success(
             f"Versiones encontradas: {len(documentos)}"
         )
 
-        df = pd.DataFrame(documentos)
+df = pd.DataFrame(documentos)
 
         st.dataframe(
             df[
