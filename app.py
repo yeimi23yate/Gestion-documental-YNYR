@@ -212,7 +212,7 @@ elif menu == "✅ Aprobaciones":
 # REPOSITORIO DOCUMENTAL
 # =====================================================
 
-if doc["Estado"] == "Publicado":
+    if doc["Estado"] == "Publicado":
     st.success("✅ Documento Oficial")
 
 elif menu == "📚 Repositorio":
