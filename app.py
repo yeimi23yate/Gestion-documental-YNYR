@@ -399,9 +399,12 @@ elif menu == "🔄 Control de Versiones":
         # FILTROS
         # ==========================================
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
 
         with col1:
+            buscar = st.text_input("🔍 Buscar documento")
+
+        with col2:
 
             responsables = sorted(
                 list(
@@ -417,7 +420,7 @@ elif menu == "🔄 Control de Versiones":
                 ["Todos"] + responsables
             )
 
-        with col2:
+        with col3:
 
             nombres = sorted(
                 list(
@@ -436,7 +439,8 @@ elif menu == "🔄 Control de Versiones":
         # ==========================================
         # APLICAR FILTROS
         # ==========================================
-if buscar:
+
+        if buscar:
 
             documentos = [
                 doc for doc in documentos
@@ -444,7 +448,7 @@ if buscar:
                 in doc["Documento"].lower()
             ]
 
-if responsable_filtro != "Todos":
+        if responsable_filtro != "Todos":
 
             documentos = [
                 doc for doc in documentos
@@ -452,7 +456,7 @@ if responsable_filtro != "Todos":
                 == responsable_filtro
             ]
 
-if documento_filtro != "Todos":
+        if documento_filtro != "Todos":
 
             documentos = [
                 doc for doc in documentos
@@ -464,13 +468,13 @@ if documento_filtro != "Todos":
         # RESULTADOS
         # ==========================================
 
-st.success(
+        st.success(
             f"Versiones encontradas: {len(documentos)}"
         )
 
-df = pd.DataFrame(documentos)
+        df = pd.DataFrame(documentos)
 
-st.dataframe(
+        st.dataframe(
             df[
                 [
                     "Documento",
@@ -483,15 +487,15 @@ st.dataframe(
             use_container_width=True
         )
 
-st.divider()
+        st.divider()
 
         # ==========================================
-        # DETALLE DE VERSIONES
+        # HISTORIAL
         # ==========================================
 
-st.subheader("📚 Historial de Versiones")
+        st.subheader("📚 Historial de Versiones")
 
-for doc in documentos:
+        for doc in documentos:
 
             with st.expander(
                 f"{doc['Documento']} - Versión {doc['Version']}"
@@ -517,7 +521,7 @@ for doc in documentos:
                     f"**Estado:** {doc['Estado']}"
                 )
 
-if doc.get("Observaciones"):
+                if doc.get("Observaciones"):
 
                     st.write(
                         f"**Observaciones:** {doc['Observaciones']}"
